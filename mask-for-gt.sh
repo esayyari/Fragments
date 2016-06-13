@@ -1,8 +1,8 @@
 #!/bin/bash
 
 algfn=$4
-#f=genes/$1/$algfn
-f=$1
+f=genes/$1/$algfn
+#f=$1
 percent=$2
 taxapercent=$3
 out=$f.mask${percent}sites.mask${taxapercent}taxa.fasta
