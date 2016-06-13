@@ -1,13 +1,13 @@
 #!/bin/bash
 
-algfn=$4
+#algfn=$4
 #f=genes/$1/$algfn
 f=$1
 percent=$2
 taxapercent=$3
 out=$f.mask${percent}sites.mask${taxapercent}taxa.fasta
 
-test $# == 4 || { echo  USAGE: gene site_percent taxa_percent file_name; exit 1;  }
+test $# == 3 || { echo  USAGE: gene site_percent taxa_percent ; exit 1;  }
 
 m=`echo $( grep ">" $f|wc -l ) \* $percent / 100 |bc`
 $WS_HOME/pasta/pasta/run_seqtools.py -infile $f -masksites $m -outfile $f.mask${percent}sites.fasta

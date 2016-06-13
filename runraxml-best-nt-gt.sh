@@ -6,23 +6,34 @@ set -x
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-test $# == 2 || exit 1
+test $# == 3 || exit 1
 
 in=$1
 DT=GTRGAMMA
 CPUS=1
 bestN=10
 filter=$2
+thirdcodon=$3
 rep=0
 st="" # Start tree, use fasttree for FastTree or anything else for default
 OMP_NUM_THREADS=$CPUS
 if [ "$filter" == 1 ]; then
-	$WS_HOME/1kpscripts/filter_remove_gappyTaxa_nt_fas.sh -i $in;  
-	$WS_HOME/1kpscripts/remove_3rd_codon_nt_fas.sh -i $in-filtered50;
-	f=$in-filtered50-rm-3rdCodon	
+	if [ "$thirdcodon" == "1" ]; then
+		$WS_HOME/1kpscripts/filter_remove_gappyTaxa_nt_fas.sh -i $in;  
+		$WS_HOME/1kpscripts/remove_3rd_codon_nt_fas.sh -i $in-filtered50;
+		f=$in-filtered50-rm-3rdCodon	
+	else
+		$WS_HOME/1kpscripts/filter_remove_gappyTaxa_nt_fas.sh -i $in;
+		f=$in-filtered50
+	fi
 else
-	$WS_HOME/1kpscripts/remove_3rd_codon_nt_fas.sh -i $in;
-	f=$in-rm-3rdCodon
+	if [ "$thirdcodon" == "1" ]; then
+
+		$WS_HOME/1kpscripts/remove_3rd_codon_nt_fas.sh -i $in;
+		f=$in-rm-3rdCodon
+	else
+		f=$in
+	fi
 fi
 S=raxml
 s="-p $RANDOM"
