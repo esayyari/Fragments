@@ -80,22 +80,23 @@ if [ "`cat fasttree.tre.BS-all |wc -l`" -ne "$rep" ]; then
    cat $in.phylip.BS$bs >> $in.phylip.BS-all
   done
   $DIR/fasttree $ftmodel $in.phylip.BS-all -n $rep > fasttree.tre.BS-all 2> ft.log.BS-all;  
+  python $DIR/arb_resolve_polytomies.py fasttree.tre.BS-all
   test $? == 0 || { cat ft.log.BS-all; exit 1; }
   rm $in.phylip.BS$bs*
-  tar rvf bootstrap-files.tar --remove-files *BS-all* *BS$bs.*
+  tar rvf bootstrap-files.tar --remove-files *BS-all* *BS-all.resolved *BS$bs.*
   gzip bootstrap-files.tar
   rm bootstrap-reps.tbz
 
 fi
 
  
-if [ ! `wc -l fasttree.tre.BS-all |sed -e "s/ .*//g"` -eq $rep ]; then
+if [ ! `wc -l fasttree.tre.BS-all.resolved |sed -e "s/ .*//g"` -eq $rep ]; then
  echo `pwd`>>$H/notfinishedproperly
  exit 1
 else
  #Finalize 
  rename "final" "final.back" *final
- raxmlHPC -f b -m $model -n final -z fasttree.tre.BS-all -t fasttree.tre.best
+ raxmlHPC -f b -m $model -n final -z fasttree.tre.BS-all.resolved -t fasttree.tre.best
 
  if [ -s RAxML_bipartitions.final ]; then
    mv logs.tar.bz logs.tar.bz.back.$RANDOM
