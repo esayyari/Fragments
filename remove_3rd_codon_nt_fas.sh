@@ -27,3 +27,4 @@ echo $o
 tmp=`mktemp`
 cat $i | sed -e 's/>\(.*\)/#>\1@/g' | tr -d "\n" | tr "\#" "\n" > $tmp
 for x in `cat $tmp`; do a=$(echo -n $x|sed -e 's/^.*@//' | sed -e 's/\(..\)\(.\)/\1/g'); b=$(echo -n $x | sed -e 's/@.*//'); echo -n "#"$b"@"$a; done | tr "#" "\n" | tr "@" "\n" > $o
+rm $tmp
