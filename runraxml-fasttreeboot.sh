@@ -7,7 +7,7 @@ module load python
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 H=$WORK/1kp/capstone/secondset
 
-test $# == 6 || exit 1
+test $# == 7 || exit 1
 
 ALGNAME=$1
 DT=$2
@@ -16,15 +16,19 @@ ID=$3
 label=$4
 rep=$5
 rapid=$6 # use rapid for rapid bootstrapping or anything else for default
+H=${7}
 OMP_NUM_THREADS=1
-
+tmpdir=`mktemp -d`
 S=raxml
 in=$DT-$ALGNAME
 if test "$rapid" == "rapid"; then boot="-x $RANDOM"; else boot="-b $RANDOM"; fi
 s="-p $RANDOM"
 dirn=raxmlboot.$in.$label
 
-cd $H/genes/$ID/
+cp $H/$ID/$in.fasta $tmpdir/$in.fasta
+
+cd $tmpdir
+pwd
 mkdir logs
 
 $DIR/convert_to_phylip.sh $in.fasta $in.phylip
@@ -34,7 +38,7 @@ if [ "$DT" == "FAA" ]; then
   ftmodel=""
 else
   model=GTRGAMMA
-  ftmodel="-gtr -nt"
+  ftmodel="-gtr -gamma"
 fi
 
 mkdir $dirn
@@ -69,23 +73,25 @@ if [ "`cat fasttree.tre.BS-all |wc -l`" -ne "$rep" ]; then
   rm RAxML_info.BS
   
   rm fast*.BS* #RAxML*.ml.BS* 
-
-  raxmlHPC -f j -s ../$in.phylip -n BS -m GTRCAT $boot -N $crep
+  rnd=$RANDOM
+  /usr/bin/raxmlHPC  -s ../$in.phylip -f j -b $rnd -n BS -m GTRGAMMA -# $crep
   mv ../$in.phylip.BS* .
-  tar cfj bootstrap-reps.tbz --remove-files $in.phylip.BS*
- 
-  for bs in `seq 0 $(( crep - 1 ))`; do 
-
-   tar xfj bootstrap-reps.tbz $in.phylip.BS$bs
+   
+  for bs in `seq 0 $(( crep - 1 ))`; do
    cat $in.phylip.BS$bs >> $in.phylip.BS-all
   done
-  $DIR/fasttree $ftmodel $in.phylip.BS-all -n $rep > fasttree.tre.BS-all 2> ft.log.BS-all;  
+#  $DIR/fasttree $ftmodel $in.phylip.BS$bs  > fasttree.tre.BS$bs 2> ft.log.BS$bs;  
+  
+  $DIR/fasttree $ftmodel -n $crep $in.phylip.BS-all > fasttree.tre.BS-all 2> ft.log.BS-all;  
   python $DIR/arb_resolve_polytomies.py fasttree.tre.BS-all
+  #done
+#  cat fasttree.tre.BS*.resolved >> fasttree.tre.BS-all.resolved
+  #tar cfj bootstrap-reps.tbz $in.phylip.BS*
   test $? == 0 || { cat ft.log.BS-all; exit 1; }
-  rm $in.phylip.BS$bs*
-  tar rvf bootstrap-files.tar --remove-files *BS-all* *BS-all.resolved *BS$bs.*
-  gzip bootstrap-files.tar
-  rm bootstrap-reps.tbz
+  #rm $in.phylip.BS$bs*
+  #tar rvf bootstrap-files.tar --remove-files *BS-all* *BS-all.resolved *BS$bs.*
+  #gzip bootstrap-files.tar
+  #rm bootstrap-reps.tbz
 
 fi
 
@@ -100,9 +106,10 @@ else
 
  if [ -s RAxML_bipartitions.final ]; then
    mv logs.tar.bz logs.tar.bz.back.$RANDOM
-   tar cvfj logs.tar.bz --remove-files RAxML_log.* RAxML_parsimonyTree.* RAxML_*back* RAxML_bootstrap.ml RAxML_result.best.* RAxML_bootstrap.ml* RAxML_info.final ft.log.* RAxML_info.BS* bootstrap-files.tar*.gz 
+   tar cfj $H/$ID/genetrees.tar.bz.$rnd $tmpdir 
+   cd $H/$ID/
    cd ..
    echo "Done">.done.$dirn
  fi
 fi
-
+rm -r $tmpdir
