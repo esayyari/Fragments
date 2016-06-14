@@ -36,9 +36,10 @@ test "`head -n 1 $in.phylip`" == "0 0" && exit 1
 
 if [ "$DT" == "FAA" ]; then
   ftmodel=""
+  model=PROTGAMMAJTT
 else
   model=GTRGAMMA
-  ftmodel="-gtr -gamma"
+  ftmodel="-gtr -nt"
 fi
 
 mkdir $dirn
@@ -74,7 +75,7 @@ if [ "`cat fasttree.tre.BS-all |wc -l`" -ne "$rep" ]; then
   
   rm fast*.BS* #RAxML*.ml.BS* 
   rnd=$RANDOM
-  /usr/bin/raxmlHPC  -s ../$in.phylip -f j -b $rnd -n BS -m GTRGAMMA -# $crep
+  /usr/bin/raxmlHPC  -s ../$in.phylip -f j -b $rnd -n BS -m $model -# $crep
   mv ../$in.phylip.BS* .
    
   for bs in `seq 0 $(( crep - 1 ))`; do
