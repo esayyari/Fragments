@@ -1,7 +1,7 @@
 #!/bin/bash
 
 algfn=$4
-f=filtered/$1/$algfn
+f=unfiltered/$1/$algfn
 percent=$2
 taxapercent=$3
 out=$f.mask${percent}sites.mask${taxapercent}taxa.fasta
