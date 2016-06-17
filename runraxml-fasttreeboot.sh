@@ -81,6 +81,8 @@ if [ "`cat fasttree.tre.BS-all |wc -l`" -ne "$rep" ]; then
   rm ../*BS*
   rm ../*BS
   rm ../RAxML_info.BS
+  rm *BS*
+  rm RAxML*BS
   raxmlHPC  -s ../$in.phylip -f j -b $rnd -n BS -m $model -# $crep
   fi
   mv ../$in.phylip.BS* .
