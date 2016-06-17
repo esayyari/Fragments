@@ -1,13 +1,23 @@
 #!/bin/bash
 
 algfn=$4
-f=unfiltered/$1/$algfn
+s=$5
+f=$s/$1/$algfn
 percent=$2
 taxapercent=$3
 out=$f.mask${percent}sites.mask${taxapercent}taxa.fasta
 
-test $# == 4 || { echo  USAGE: gene site_percent taxa_percent file_name; exit 1;  }
-sed -e 's/\(N\|X\)/-/g' $f > $f-frag-rem
+test $# == 5 || { echo  USAGE: gene site_percent taxa_percent file_name; exit 1;  }
+tmp=`mktemp`
+while read x; do
+y=$(echo $x | grep ">")
+if [ "$y" == "" ]; then 
+echo $x | sed -e 's/N\|X/-/g' >> $tmp
+else
+echo $x >> $tmp
+fi
+done < $f
+mv $tmp $f-frag-rem
 m=`echo $( grep ">" $f-frag-rem|wc -l ) \* $percent / 100 |bc`
 $WS_HOME/pasta/pasta/run_seqtools.py -infile $f-frag-rem -masksites $m -outfile $f-frag-rem.mask${percent}sites.fasta
 echo From `$WS_HOME/insects/simplifyfasta.sh $f-frag-rem|wc -L` sites in $f-frag-rem to `wc -L $f-frag-rem.mask${percent}sites.fasta` sites

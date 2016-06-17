@@ -105,12 +105,9 @@ else
  rename "final" "final.back" *final
  raxmlHPC -f b -m $model -n final -z fasttree.tre.BS-all.resolved -t fasttree.tre.best
 
- if [ -s RAxML_bipartitions.final ]; then
    mv logs.tar.bz logs.tar.bz.back.$RANDOM
    tar cfj $H/$ID/genetrees.tar.bz.$rnd $tmpdir 
    cd $H/$ID/
    cd ..
    echo "Done">.done.$dirn
- fi
 fi
-rm -r $tmpdir
