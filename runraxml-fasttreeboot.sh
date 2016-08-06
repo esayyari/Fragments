@@ -75,7 +75,16 @@ if [ "`cat fasttree.tre.BS-all |wc -l`" -ne "$rep" ]; then
   
   rm fast*.BS* #RAxML*.ml.BS* 
   rnd=$RANDOM
-  /usr/bin/raxmlHPC  -s ../$in.phylip -f j -b $rnd -n BS -m $model -# $crep
+  raxmlHPC  -s ../$in.phylip -f j -b $rnd -n BS -m $model -# $crep
+  if [ -s "../$in.phylip.reduced" ]; then 
+  mv ../$in.phylip.reduced ../$in.phylip
+  rm ../*BS*
+  rm ../*BS
+  rm ../RAxML_info.BS
+  rm *BS*
+  rm RAxML*BS
+  raxmlHPC  -s ../$in.phylip -f j -b $rnd -n BS -m $model -# $crep
+  fi
   mv ../$in.phylip.BS* .
    
   for bs in `seq 0 $(( crep - 1 ))`; do
@@ -105,12 +114,8 @@ else
  rename "final" "final.back" *final
  raxmlHPC -f b -m $model -n final -z fasttree.tre.BS-all.resolved -t fasttree.tre.best
 
- if [ -s RAxML_bipartitions.final ]; then
-   mv logs.tar.bz logs.tar.bz.back.$RANDOM
    tar cfj $H/$ID/genetrees.tar.bz.$rnd $tmpdir 
    cd $H/$ID/
    cd ..
    echo "Done">.done.$dirn
- fi
 fi
-rm -r $tmpdir

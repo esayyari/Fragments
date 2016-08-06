@@ -21,7 +21,7 @@ dest = open(dest_fpath, "w")
 print "Will write to file %s" % os.path.abspath(dest_fpath)
 
 
-trees = dendropy.TreeList()
+trees = dendropy_3.TreeList()
 for tree_file in [src_fpath]:
     trees.read_from_path(tree_file,'newick' ) #, taxon_set = trees.taxon_set, encode_splits=True)
 for tree in trees:
