@@ -4,10 +4,10 @@ Created on Jun 3, 2011
 
 @author: smirarab
 '''
-import dendropy
+import dendropy_3 as dendropy
 import sys
 import random
-from dendropy import Node
+from dendropy_3 import Node
 
 def resolve_polytomies(tree, update_splits=False, rng=None):
     """

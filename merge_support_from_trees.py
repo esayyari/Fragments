@@ -1,6 +1,6 @@
 #! /usr/bin/env python
 
-import dendropy
+import dendropy_3 as dendropy
 import os
 import sys
 import re
