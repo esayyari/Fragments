@@ -23,9 +23,9 @@ print "Will write to file %s" % os.path.abspath(dest_fpath)
 
 trees = dendropy.TreeList()
 for tree_file in [src_fpath]:
-    trees.read_from_path(tree_file,'newick' ) #, taxon_set = trees.taxon_set, encode_splits=True)
+    trees.read(tree_file,'newick' ) #, taxon_set = trees.taxon_set, encode_splits=True)
 for tree in trees:
-    tree.encode_splits()
+    tree.encode_bipartitions()
 
 #con_tree = trees.consensus(min_freq=threshold)
 con_tree = dendropy.Tree(trees[0])

@@ -13,9 +13,9 @@ import os.path
 hdir=os.path.dirname(os.path.realpath(__file__))
 
 ROOTS = [
-        ["Red Algae","Chromista (Algae)"],
-        ["Glaucophyta (Algae)"],
-        ["prasinophytes/Prasinococcales"],["prasinophytes"],["Volca_v2.0","Chlre_v5.5"],["Klefl_v1.0"]
+        ["Ixodes_scapularis"],
+        ["Symphylella_vulgaris","Glomeris_pustulata"],
+        ["Lepeophtheirus_salmonis","Daphnia_pulex"],["Cypridininae_sp","Sarsinebalia_urgorii","Celuca_puligator","Litopenaeus_vannamei"]
         ]
 
 def root (rootgroup, tree):
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     for x in open(os.path.join(hdir,"annotate.txt")):
         c[x.split('\t')[0]] = x.split('\t')[2][0:-1]
 
-    trees = dendropy.TreeList.get_from_path(treeName, 'newick',rooted=True, preserve_underscores=True)
+    trees = dendropy.TreeList.get_from_path(treeName, 'newick',rooting="force-rooted", preserve_underscores=True)
     for i,tree in enumerate(trees):
 	roots = ROOTS
         while roots and root(roots[0],tree) is None:
@@ -68,4 +68,4 @@ if __name__ == '__main__':
         if not roots:
             print "Tree %d: none of the root groups %s exist. Leaving unrooted." %(i," or ".join((" and ".join(a) for a in ROOTS)))
     print "writing results to " + resultsFile        
-    trees.write(open(resultsFile,'w'),'newick',write_rooting=False,suppress_leaf_node_labels=False)
+    trees.write(path=resultsFile,'newick',suppress_rooting=False,suppress_leaf_node_labels=False)
