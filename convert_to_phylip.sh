@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -x
+#set -x
 
 tmp=`mktemp`
 
@@ -8,9 +8,9 @@ tmp=`mktemp`
 sed -e "s/>\(.*\)/@>\1@/g" $1|tr -d "\n"|tr "@" "\n"|tail -n+2> $tmp
 
 #find length and count
-len=`cat $tmp|grep -v ">"| wc -L`
+lent=`head -n 2 $tmp|grep -v ">"| sed -e 's/ //g' | wc -c`
+len=$((lent - 1))
 count=`grep ">" $tmp|wc -l`
-
 echo $count $len >$2
 cat $tmp|tr "\n" ";"|sed -e "s/;>/\n/g" -e "s/;/ /g" -e "s/>//g" >>$2
 

@@ -4,7 +4,7 @@ Created on Jun 3, 2011
 
 @author: smirarab
 '''
-import dendropy
+import dendropy_3 as dendropy
 import sys
 import os
 import copy
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     for x in open(os.path.join(hdir,"annotate.txt")):
         c[x.split('\t')[0]] = x.split('\t')[2][0:-1]
 
-    trees = dendropy.TreeList.get_from_path(treeName, 'newick',rooted=True, preserve_underscores=True)
+    trees = dendropy_3.TreeList.get_from_path(treeName, 'newick',rooted=True, preserve_underscores=True)
 
     for i,tree in enumerate(trees):
         disrt = [n.distance_from_root() for n in tree.leaf_iter()]
