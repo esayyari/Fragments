@@ -4,10 +4,10 @@ Created on Jun 3, 2011
 
 @author: smirarab
 '''
-import dendropy_3 as dendropy
+import dendropy
 import sys
 import random
-from dendropy_3 import Node
+from dendropy import Node
 
 def resolve_polytomies(tree, update_splits=False, rng=None):
     """
@@ -51,9 +51,9 @@ if __name__ == '__main__':
     
     resultsFile="%s.resolved" % treeName
     
-    trees = dendropy.TreeList.get_from_path(treeName, 'newick')
+    trees = dendropy.TreeList.get(treeName, 'newick')
     for tree in trees:            
         print ".",  
         resolve_polytomies(tree,rng=random) 
     print 
-    trees.write(open(resultsFile,'w'),'newick',suppress_rooting=True)
+    trees.write(resultsFile,'newick',suppress_rooting=True)

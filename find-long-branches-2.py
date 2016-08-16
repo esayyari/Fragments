@@ -4,7 +4,7 @@ Created on Jun 3, 2011
 
 @author: smirarab
 '''
-import dendropy_3 as dendropy
+import dendropy
 import sys
 import os
 import copy
