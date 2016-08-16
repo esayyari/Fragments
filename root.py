@@ -14,9 +14,9 @@ import os.path
 hdir=os.path.dirname(os.path.realpath(__file__))
 
 ROOTS = [
-        ["Ixodes_scapularis"],
+        ["IXODES_SCAPULARIS"],
         ["Symphylella_vulgaris","Glomeris_pustulata"],
-        ["Lepeophtheirus_salmonis","Daphnia_pulex"],["Cypridininae_sp","Sarsinebalia_urgorii","Celuca_puligator","Litopenaeus_vannamei"]
+        ["Lepeophtheirus_salmonis","DAPHNIA_PULEX"],["Cypridininae_sp","Sarsinebalia_urgorii","Celuca_puligator","Litopenaeus_vannamei"]
         ]
 
 def root (rootgroup, tree):
@@ -69,4 +69,4 @@ if __name__ == '__main__':
         if not roots:
             print "Tree %d: none of the root groups %s exist. Leaving unrooted." %(i," or ".join((" and ".join(a) for a in ROOTS)))
     print "writing results to " + resultsFile        
-    trees.write(path=resultsFile,'newick',suppress_rooting=False,suppress_leaf_node_labels=False)
+    trees.write(path=resultsFile,schema='newick',suppress_rooting=True,suppress_leaf_node_labels=False)
