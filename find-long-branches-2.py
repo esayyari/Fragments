@@ -58,14 +58,14 @@ if __name__ == '__main__':
     trees = dendropy.TreeList.get_from_path(treeName, 'newick',rooting="default-rooted", preserve_underscores=True)
 
     for i,tree in enumerate(trees):
-        disrt = [n.distance_from_root() for n in tree.leaf_iter()]
+        disrt = [n.distance_from_root() for n in tree.leaf_node_iter()]
         med = median(disrt)
         std = pstdev(disrt)
         print i+1,":", med, std, SD * std + med
         
-	for n in tree.leaf_iter():
+	for n in tree.leaf_node_iter():
             if med  + SD * std < n.distance_from_root():
-                print n.taxon.label, c[n.taxon.label], n.distance_from_root()
+                print n.taxon.label,  n.distance_from_root()
         print
 
     #print "writing results to " + resultsFile        
