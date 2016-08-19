@@ -50,8 +50,12 @@ if __name__ == '__main__':
 
     treeName = sys.argv[1]
     SD=int(sys.argv[2])
+<<<<<<< HEAD
     meth=sys.argv[3]
     print SD
+=======
+    method=sys.argv[3]
+>>>>>>> 4f1be1dbb3cc943f3843ec8d5c76838f9b59a471
     c={}
     for x in open(os.path.join(hdir,"annotate.txt")):
 	print x.split('\t')[2][0:-1]
@@ -64,16 +68,16 @@ if __name__ == '__main__':
 	avg = mean(disrt)
         std = pstdev(disrt)
         print i+1,":", med, avg, std, SD * std + med, SD * sdt + avg
-        if meth == "med":
+	if method == "sd":        
 		for n in tree.leaf_node_iter():
         	    if med  + SD * std < n.distance_from_root():
                 	print n.taxon.label,  n.distance_from_root()
 	        print
-	else
+	elif method == "avg":
 		for n in tree.leaf_node_iter():
                     if avg  + SD * std < n.distance_from_root():
                         print n.taxon.label,  n.distance_from_root()
-                print
-	
+                print	
+
     #print "writing results to " + resultsFile        
     #trees.write(open(resultsFile,'w'),'newick',write_rooting=False,suppress_leaf_node_labels=False)
