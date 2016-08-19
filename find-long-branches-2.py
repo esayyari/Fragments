@@ -50,23 +50,30 @@ if __name__ == '__main__':
 
     treeName = sys.argv[1]
     SD=int(sys.argv[2])
-    
+    meth=sys.argv[3]
+    print SD
     c={}
     for x in open(os.path.join(hdir,"annotate.txt")):
+	print x.split('\t')[2][0:-1]
         c[x.split('\t')[0]] = x.split('\t')[2][0:-1]
 
-    trees = dendropy.TreeList.get_from_path(treeName, 'newick',rooting="default-rooted", preserve_underscores=True)
-
+    trees = dendropy.TreeList.get_from_path(treeName, 'newick',rooting="force-rooted", preserve_underscores=True)
     for i,tree in enumerate(trees):
-        disrt = [n.distance_from_root() for n in tree.leaf_iter()]
+        disrt = [n.distance_from_root() for n in tree.leaf_node_iter()]
         med = median(disrt)
+	avg = mean(disrt)
         std = pstdev(disrt)
-        print i+1,":", med, std, SD * std + med
-        
-	for n in tree.leaf_iter():
-            if med  + SD * std < n.distance_from_root():
-                print n.taxon.label, c[n.taxon.label], n.distance_from_root()
-        print
-
+        print i+1,":", med, avg, std, SD * std + med, SD * sdt + avg
+        if meth == "med":
+		for n in tree.leaf_node_iter():
+        	    if med  + SD * std < n.distance_from_root():
+                	print n.taxon.label,  n.distance_from_root()
+	        print
+	else
+		for n in tree.leaf_node_iter():
+                    if avg  + SD * std < n.distance_from_root():
+                        print n.taxon.label,  n.distance_from_root()
+                print
+	
     #print "writing results to " + resultsFile        
     #trees.write(open(resultsFile,'w'),'newick',write_rooting=False,suppress_leaf_node_labels=False)
