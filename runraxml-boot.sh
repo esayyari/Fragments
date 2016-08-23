@@ -36,9 +36,9 @@ if [ "$donebs" == "" ]; then
  rename "best" "best.back" *best
  # Estimate the RAxML best tree
  if [ $C -gt 1 ]; then
-  $HOME/bin/raxmlHPC-PTHREADS-SSE3-git-Sept25 -m $model -T $C -n best -s ../$in.phylip $s -N 10
+  $HOME/bin/raxmlHPC-PTHREADS -m $model -T $C -n best -s ../$in.phylip $s -N 10
  else
-  $HOME/bin/raxmlHPC-SSE3-git-Sept25 -m $model -n best -s ../$in.phylip $s -N 10
+  $HOME/bin/raxmlHPC -m $model -n best -s ../$in.phylip $s -N 10
  fi
 fi
 
