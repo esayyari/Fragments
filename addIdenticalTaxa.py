@@ -45,4 +45,3 @@ trees.write(
 f.close()
 g.close()
 # Now this works
-
