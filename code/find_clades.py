@@ -71,7 +71,7 @@ class Mono(object):
 
     def analyze_clade(self,name, clade, comps, tree, treeName):
         taxa = get_present_taxa(tree, clade)
-        taxas = set(t.label for t in taxa)
+
         if comps:
             for comp in comps:
                 if not set(self.allclades[comp]) & taxas:
@@ -119,22 +119,22 @@ class Mono(object):
 
 if __name__ == '__main__':
     
-    taxa = set(x.split('\t')[0].strip() for x in open("names.csv").readlines())
+    taxa = set(x.split('\t')[0].strip() for x in open("names.csv").readlines())	
     mono = Mono(taxa)
     mono.read_clades("clade-defs.txt")
-    
+    #print mono
     #print [(k,len(v)) for k,v in clades.items()]
     for fileName in sys.argv[1:]:
         
         trees = dendropy.TreeList.get(path=fileName, schema='newick', rooting="force-rooted")
-        namemismatch = set(t.label for t in trees.taxon_namespace) - taxa
+	labelsSet = set(t.label for t in trees.taxon_namespace)
+        namemismatch = labelsSet - taxa
         if namemismatch:
             print >> sys.stderr, "The following taxa in the tree are not found in the names file:\n %s" %str(namemismatch)
             continue
         
         for i, tree in enumerate(trees):
             treeName = "%s_%s" % (fileName.replace("_"," "), i)
-
             mono.analyze(tree, treeName)
 
 
