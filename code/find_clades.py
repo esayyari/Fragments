@@ -84,8 +84,12 @@ class Mono(object):
             self.check_mono (tree, treeName, taxa, name, len(taxa) == len(clade))
 
     def analyze(self, tree, treeName):
-        for k, v in self.clades.items():
-            self.analyze_clade(k, v, self.clade_comps[k], tree, treeName)
+        for k, v in self.allclades.items():
+            if k in self.clade_comps:
+                clade_comp = self.clade_comps[k]
+            else:
+                clade_comp = None
+            self.analyze_clade(k, v, clade_comp, tree, treeName)
 
     def read_clades(self,filename):
         for line in open(filename):
