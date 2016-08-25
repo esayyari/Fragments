@@ -22,7 +22,7 @@ tmpdir=$H/$ID/$DT-$ALGNAME-raxml
 mkdir -p $tmpdir
 S=raxml
 in=$DT-$ALGNAME
-if test "$rapid" == "rapid"; then boot="-x $RANDOM"; else boot="-b $RANDOM"; fi
+boot="-x $RANDOM"
 s="-p $RANDOM"
 dirn=raxmlboot.$in.$label
 
@@ -34,10 +34,18 @@ mkdir logs
 
 $DIR/convert_to_phylip.sh $in.fasta $in.phylip
 
-$DIR/listRemovedTaxa.py ../$in.phylip ../listRemoved.txt
 test "`head -n 1 $in.phylip`" == "0 0" && exit 1
+$DIR/listRemovedTaxa.py $in.phylip ../listRemoved.txt
+raxmlHPC  -s ../$in.phylip -f j $boot -n BS -m $model -# 2
+if [ -s "../$in.phylip.reduced" ]; then
+	mv ../$in.phylip.reduced ../$in.phylip
+fi
+rm ../*BS*
+rm ../RAxML_info.BS
+rm *BS*
+rm RAxML*BS
 
-if [ "$A" == "FAA" ]; then
+if [ "$DT" == "FAA" ]; then
 	if [ -s bestModel.$ALGNAME ]; then
 		echo bestModel.$ALGNAME
 	else
@@ -64,13 +72,15 @@ fi
 
 mkdir $dirn
 cd $dirn
+
+
 #Figure out if main ML has already finished
 donebs=`grep "Overall execution time" RAxML_info.best`
 #Infer ML if not done yet
 if [ "$donebs" == "" ]; then
 	rm RAxML*best.back
 	rename "best" "best.back" *best
-	$HOME/bin/raxmlHPC -m $model -n best -s ../$in.phylip $s -N 10
+	raxmlHPC -m $model -n best -s ../$in.phylip $s -N 1
 fi
 
 #Figure out if bootstrapping has already finished
@@ -88,17 +98,8 @@ if [ "$donebs" == "" ]; then
 	fi
 	rename "ml" "back.ml" *ml
 	rm RAxML_info.ml
-	raxmlHPC  -s ../$in.phylip -f j -b $rnd -n BS -m $model -# $crep
-	if [ -s "../$in.phylip.reduced" ]; then
-		mv ../$in.phylip.reduced ../$in.phylip
-	fi
-	rm ../*BS*
-	rm ../RAxML_info.BS
-	rm *BS*
-	rm RAxML*BS
-
 	if [ $crep -gt 0 ]; then
-		$HOME/bin/raxmlHPC  -m $model -n ml -s ../$in.phylip -N $crep $boot $s &>$H/logs/ml_std.errout.$in
+		raxmlHPC  -m $model -n ml -s ../$in.phylip -N $crep $boot $s &> $tmpdir/logs/ml_std.errout.$in
 	fi
 fi
 if [ ! -s RAxML_bootstrap.all ] || [ `cat RAxML_bootstrap.all|wc -l` -ne $rep ]; then
@@ -112,24 +113,25 @@ else
  
 #Finalize
 	 
-	sed -i "s/'//g" RAxML_bootstrap.best
+	sed -i "s/'//g" RAxML_bestTree.best
 	sed -i "s/'//g" RAxML_bootstrap.all
+	sed -i "/^$/d" ../listRemoved.txt
 	if [ -s "../listRemoved.txt" ]; then
-		$DIR/addIdenticalTaxa.py RAxML_bootstrap.best RAxML_bootstrap.best.addPoly ../listRemoved.txt
-		sed -i 's/-/_/g' RAxML_bootstrap.best.addPoly
+		$DIR/addIdenticalTaxa.py RAxML_bestTree.best RAxML_bestTree.best.addPoly ../listRemoved.txt
+		sed -i 's/-/_/g' RAxML_bestTree.best.addPoly
 		$DIR/addIdenticalTaxa.py RAxML_bootstrap.all RAxML_bootstrap.all.addPoly ../listRemoved.txt
 		sed -i 's/-/_/g' RAxML_bootstrap.all.addPoly
 	else
-		cp RAxML_bootstrap.best RAxML_bootstrap.best.addPoly
+		cp RAxML_bestTree.best RAxML_bestTree.best.addPoly
 		cp RAxML_bootstrap.all RAxML_bootstrap.all.addPoly
 	fi	
-	sed -i "s/'//g" RAxML_bootstrap.best.addPoly
+	sed -i "s/'//g" RAxML_bestTree.best.addPoly
 	sed -i "s/'//g" RAxML_bootstrap.all.addPoly
-	tmptmp=RAxML_bootstrap.best.addPoly
+	tmptmp=RAxML_bestTree.best.addPoly
 	rt=$(nw_labels -I $tmptmp | head -n 1)
-	nw_reroot RAxML_bootstrap.best.addPoly $rt > RAxML_bootstrap.best.addPoly.rooted
+	nw_reroot RAxML_bestTree.best.addPoly $rt > RAxML_bestTree.best.addPoly.rooted
 	nw_reroot RAxML_bootstrap.all.addPoly $rt > RAxML_bootstrap.all.addPoly.rooted
-	nw_support -p RAxML_bootstrap.best.addPoly.rooted RAxML_bootstrap.all.addPoly.rooted >> RAxML_bootstrap.best.addPoly.rooted.final
+	nw_support -p RAxML_bestTree.best.addPoly.rooted RAxML_bootstrap.all.addPoly.rooted >> RAxML_bestTree.best.addPoly.rooted.final
 # raxmlHPC -f b -m $model -n final -z fasttree.tre.BS-all.resolved -t fasttree.tre.best
 	tar cvfj logs.tar.bz --remove-files RAxML_log.* RAxML_parsimonyTree.best.RUN.* RAxML_bootstrap.ml RAxML_result.best.RUN.*RAxML_bootstrap.ml*
 	cd ..

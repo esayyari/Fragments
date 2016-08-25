@@ -17,6 +17,7 @@ for lt in g:
 trees = dendropy.TreeList()
 for line in f:
 	dictExistNode = dict()
+	line = line.replace("\n","")
 	line = line.replace("_","-")
 	tre = dendropy.Tree.get_from_string(line,"newick")
 	for taxa in taxa_list:
