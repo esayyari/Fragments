@@ -22,7 +22,7 @@ tmpdir=$H/$ID/$DT-$ALGNAME-raxml
 mkdir -p $tmpdir
 S=raxml
 in=$DT-$ALGNAME
-boot="-x $RANDOM"
+test $rapid == "rapid" && boot="-x $RANDOM" || boot="-b $RANDOM"
 s="-p $RANDOM"
 dirn=raxmlboot.$in.$label
 
@@ -35,15 +35,21 @@ mkdir logs
 $DIR/convert_to_phylip.sh $in.fasta $in.phylip
 
 test "`head -n 1 $in.phylip`" == "0 0" && exit 1
-$DIR/listRemovedTaxa.py $in.phylip ../listRemoved.txt
-raxmlHPC  -s ../$in.phylip -f j $boot -n BS -m $model -# 2
-if [ -s "../$in.phylip.reduced" ]; then
-	mv ../$in.phylip.reduced ../$in.phylip
+$DIR/listRemovedTaxa.py $in.phylip listRemoved.txt
+
+if [ "$DT" == "FAA" ]; then
+	raxmlHPC  -s $in.phylip -f j -b $RANDOM -n BS -m PROTGAMMAJTT -# 2
+else
+        raxmlHPC  -s $in.phylip -f j -b $RANDOM -n BS -m  GTRGAMMA -# 2
 fi
-rm ../*BS*
-rm ../RAxML_info.BS
+
+if [ -s "$in.phylip.reduced" ]; then
+	mv $in.phylip.reduced $in.phylip
+fi
 rm *BS*
+rm RAxML_info.BS
 rm RAxML*BS
+
 
 if [ "$DT" == "FAA" ]; then
 	if [ -s bestModel.$ALGNAME ]; then
@@ -80,7 +86,7 @@ donebs=`grep "Overall execution time" RAxML_info.best`
 if [ "$donebs" == "" ]; then
 	rm RAxML*best.back
 	rename "best" "best.back" *best
-	raxmlHPC -m $model -n best -s ../$in.phylip $s -N 1
+	raxmlHPC -m $model -n best -s ../$in.phylip $s -N 10
 fi
 
 #Figure out if bootstrapping has already finished
