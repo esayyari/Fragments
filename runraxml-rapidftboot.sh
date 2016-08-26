@@ -57,6 +57,7 @@ else
 fi
 
 mkdir $dirn
+
 cd $dirn
 
 #Figure out if main ML has already finished
