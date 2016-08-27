@@ -51,9 +51,9 @@ if __name__ == '__main__':
     
     resultsFile="%s.resolved" % treeName
     
-    trees = dendropy.TreeList.get(treeName, 'newick')
+    trees = dendropy.TreeList.get(path=treeName, schema='newick')
     for tree in trees:            
         print ".",  
         resolve_polytomies(tree,rng=random) 
     print 
-    trees.write(resultsFile,'newick',suppress_rooting=True)
+    trees.write(path=resultsFile,schema='newick',suppress_rooting=True)

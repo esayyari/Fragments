@@ -7,7 +7,7 @@ module load python
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 H=$WORK/1kp/capstone/secondset
 
-test $# == 7 || exit 1
+test $# == 8 || exit 1
 
 ALGNAME=$1
 DT=$2
@@ -38,7 +38,11 @@ $DIR/convert_to_phylip.sh $in.fasta $in.phylip
 
 test "`head -n 1 $in.phylip`" == "0 0" && exit 1
 $DIR/listRemovedTaxa.py $in.phylip ../listRemoved.txt
-raxmlHPC  -s ../$in.phylip -f j $boot -n BS -m $model -# 2
+if [ "$DT" == "FAA" ]; then
+        raxmlHPC  -s $in.phylip -f j -b $RANDOM -n BS -m PROTGAMMAJTT -# 2
+else
+        raxmlHPC  -s $in.phylip -f j -b $RANDOM -n BS -m  GTRGAMMA -# 2
+fi
 if [ -s "../$in.phylip.reduced" ]; then
 	mv ../$in.phylip.reduced ../$in.phylip
 fi
@@ -83,7 +87,7 @@ if [ "$donebs" == "" ]; then
 	rm RAxML*best.back
 	rename "best" "best.back" *best
 	if [ "$st" == "fasttree" ]; then
-		test -s fasttree.tre || { $DIR/fasttree $ftmodel ../$in.phylip > fasttree.tre 2> ft.log; }
+		test -s fasttree.tre || { fasttree $ftmodel ../$in.phylip > fasttree.tre 2> ft.log; }
 		test $? == 0 || { cat ft.log; exit 1; }
 		python $DIR/arb_resolve_polytomies.py fasttree.tre
 		startingtree="-t fasttree.tre.resolved"
@@ -97,7 +101,7 @@ fi
 #Figure out if bootstrapping has already finished
 donebs=`grep "Overall Time" RAxML_info.ml`
 #Bootstrap if not done yet
-if [ "$donebs" == "" ]; 
+if [ "$donebs" == "" ]; then 
 	crep=$rep
 	# if bootstrapping is partially done, resume from where it was left
 	if [ `ls RAxML_bootstrap.ml*|wc -l` -ne 0 ]; then
@@ -115,12 +119,11 @@ if [ "$donebs" == "" ];
 		tar cfj bootstrap-reps.tbz --remove-files $in.phylip.BS*
 		for bs in `seq 0 $(( crep - 1 ))`; do
 			tar xfj bootstrap-reps.tbz $in.phylip.BS$bs
+			
 			fasttree $ftmodel $in.phylip.BS$bs > fasttree.tre.BS$bs 2> ft.log.BS$bs;
 			test $? == 0 || { cat ft.log.BS$bs; exit 1; }
 			python $DIR/arb_resolve_polytomies.py fasttree.tre.BS$bs
-			st=fasttree.tre.BS$bs.resolved
-				
-			raxmlHPC  -F -t $st -m $model -n ml.BS$bs -s ../$in.phylip.BS$bs -N 1  $s &> $tmpdir/logs/ml_std.errout.$in
+			raxmlHPC  -F -t fasttree.tre.BS$bs.resolved  -m $model -n ml.BS$bs -s $in.phylip.BS$bs -N 1  $s &> $tmpdir/logs/ml_std.errout.$in
 			test $? == 0 || { echo in running RAxML on bootstrap trees; exit 1; }
 			cat RAxML_result.ml.BS$bs >> RAxML_bootstrap.all
 			rm $in.phylip.BS$bs*
