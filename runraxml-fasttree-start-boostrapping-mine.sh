@@ -43,8 +43,8 @@ if [ "$DT" == "FAA" ]; then
 else
         raxmlHPC  -s $in.phylip -f j -b $RANDOM -n BS -m  GTRGAMMA -# 2
 fi
-if [ -s "../$in.phylip.reduced" ]; then
-	mv ../$in.phylip.reduced ../$in.phylip
+if [ -s "$in.phylip.reduced" ]; then
+	mv $in.phylip.reduced $in.phylip
 fi
 rm ../*BS*
 rm ../RAxML_info.BS
@@ -100,30 +100,44 @@ fi
 
 #Figure out if bootstrapping has already finished
 donebs=`grep "Overall Time" RAxML_info.ml`
+if [ -s RAxML_bootstrap.all ]; then
+	donerep=`cat RAxML_bootstrap.all | grep ";" | wc -l`
+else
+	donerep=0
+fi
+if [ -s RAxML_bootstrap.all.addPoly ]; then
+	donebss=`cat RAxML_bootstrap.all.addPoly | grep ";" | wc -l`
+else
+	donebss=0
+fi
 #Bootstrap if not done yet
-if [ "$donebs" == "" ]; then 
+test "$donebss" -eq "$rep" && echo "bootstrapping was finished previousely" && exit 0
+if [ "$donerep" -ne "$rep" ]; then 
 	crep=$rep
+	l=""
 	# if bootstrapping is partially done, resume from where it was left
-	if [ `ls RAxML_bootstrap.ml*|wc -l` -ne 0 ]; then
-		l=`cat RAxML_bootstrap.ml*|wc -l|sed -e "s/ .*//g"`
+	if [ `cat RAxML_bootstrap.all | grep ";" |  wc -l` -ne 0 ]; then
+		l=`cat RAxML_bootstrap.all |grep ";" | wc -l|sed -e "s/ .*//g"`
 		crep=`expr $rep - $l`
 	fi
-	if [ -s RAxML_bootstrap.ml ]; then
-		cp RAxML_bootstrap.ml RAxML_bootstrap.ml.$l
+	if [ -s RAxML_bootstrap.all ]; then
+		cp RAxML_bootstrap.all RAxML_bootstrap.all.$l
 	fi
-	rename "ml" "back.ml" *ml
-	rm RAxML_info.ml
+	rename "all" "back.all" *.all
+	rm RAxML_info.ml*
 	if [ $crep -gt 0 ]; then
-		$DIR/raxmlHPC -f j -s ../$in.phylip -n BS -m $model $boot -N $crep	
-		mv ../$in.phylip.BS* .
-		tar cfj bootstrap-reps.tbz --remove-files $in.phylip.BS*
-		for bs in `seq 0 $(( crep - 1 ))`; do
+		if [ "$l" == "" ]; then
+			$DIR/raxmlHPC -f j -s ../$in.phylip -n BS -m $model $boot -N $crep	
+			mv ../$in.phylip.BS* .
+			tar cfj bootstrap-reps.tbz --remove-files $in.phylip.BS*
+			l=0
+		fi
+		for bs in `seq $l $(( rep - 1 ))`; do
 			tar xfj bootstrap-reps.tbz $in.phylip.BS$bs
-			
 			fasttree $ftmodel $in.phylip.BS$bs > fasttree.tre.BS$bs 2> ft.log.BS$bs;
 			test $? == 0 || { cat ft.log.BS$bs; exit 1; }
 			python $DIR/arb_resolve_polytomies.py fasttree.tre.BS$bs
-			raxmlHPC  -F -t fasttree.tre.BS$bs.resolved  -m $model -n ml.BS$bs -s $in.phylip.BS$bs -N 1  $s &> $tmpdir/logs/ml_std.errout.$in
+			raxmlHPC -F -t fasttree.tre.BS$bs.resolved -m $model -n ml.BS$bs -s $in.phylip.BS$bs -N 1  $s &> $tmpdir/logs/ml_std.errout.$in
 			test $? == 0 || { echo in running RAxML on bootstrap trees; exit 1; }
 			cat RAxML_result.ml.BS$bs >> RAxML_bootstrap.all
 			rm $in.phylip.BS$bs*
@@ -131,8 +145,12 @@ if [ "$donebs" == "" ]; then
 		done
 	fi
 fi
-if [ ! -s RAxML_bootstrap.all ] || [ `cat RAxML_bootstrap.all|wc -l` -ne $rep ]; then
+if [ ! -s RAxML_bootstrap.all ]; then
 	cat  RAxML_bootstrap.ml* > RAxML_bootstrap.all
+elif [ `cat RAxML_bootstrap.all |wc -l` -ne $rep ]; then
+	if [ -s RAxML_bootstrap.back.all ]; then
+		cat RAxML_bootstrap.back.all >> RAxML_bootstrap.all;
+	fi
 fi
 
 if [ ! `wc -l RAxML_bootstrap.all|sed -e "s/ .*//g"` -eq $rep ]; then
