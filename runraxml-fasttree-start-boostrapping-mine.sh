@@ -114,8 +114,6 @@ fi
 test "$donebss" -eq "$rep" && echo "bootstrapping was finished previousely" && exit 0
 if [ "$donerep" -ne "$rep" ]; then 
 	crep=$rep
-	rm RAxML_info.BS
-	rm ../RAxML_info.BS
 	l=""
 	# if bootstrapping is partially done, resume from where it was left
 	if [ `cat RAxML_bootstrap.all | grep ";" |  wc -l` -ne 0 ]; then
