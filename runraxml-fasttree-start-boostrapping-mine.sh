@@ -102,6 +102,8 @@ fi
 donebs=`grep "Overall Time" RAxML_info.ml`
 #Bootstrap if not done yet
 if [ "$donebs" == "" ]; then 
+	rm RAxML_info.BS
+	rm ../RAxML_info.BS
 	crep=$rep
 	# if bootstrapping is partially done, resume from where it was left
 	if [ `ls RAxML_bootstrap.ml*|wc -l` -ne 0 ]; then
