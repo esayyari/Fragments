@@ -126,7 +126,9 @@ if [ "$donerep" -ne "$rep" ]; then
 	rename "all" "back.all" *.all
 	rm RAxML_info.ml*
 	if [ $crep -gt 0 ]; then
-		if [ "$l" == "" ]; then
+		if [ "$l" == "" ] || [ "$l" -eq "0" ]; then
+			rm RAxML_info.BS
+			rm *.BS*
 			$DIR/raxmlHPC -f j -s ../$in.phylip -n BS -m $model $boot -N $crep	
 			mv ../$in.phylip.BS* .
 			tar cfj bootstrap-reps.tbz --remove-files $in.phylip.BS*
