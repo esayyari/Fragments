@@ -46,10 +46,7 @@ fi
 if [ -s "$in.phylip.reduced" ]; then
 	mv $in.phylip.reduced $in.phylip
 fi
-rm ../*BS*
-rm ../RAxML_info.BS
-rm *BS*
-rm RAxML*BS
+rm RAxML_info.BS
 
 if [ "$DT" == "FAA" ]; then
 	if [ -s bestModel.$ALGNAME ]; then
@@ -97,9 +94,21 @@ if [ "$donebs" == "" ]; then
 	
 	raxmlHPC -m $model -n best -s ../$in.phylip $s -N 10 &> ../logs/best_std.errorout.$in
 fi
-
+ 
 #Figure out if bootstrapping has already finished
 donebs=`grep "Overall Time" RAxML_info.ml`
+if [ -s RAxML_bootstrap.all ] && [ -s RAxML_bootstrap.back.all ]; then
+	di=$(diff <(sort RAxML_bootstrap.back.all) <(sort RAxML_bootstrap.all))
+	if [ "$di" != "" ]; then
+		cat RAxML_bootstrap.all >> RAxML_bootstrap.back.all
+		mv RAxML_bootstrap.back.all RAxML_bootstrap.all
+	else
+		rm RAxML_bootstrap.back.all
+	fi
+elif [ -s RAxML_bootstrap.back.all ] && [ ! -s RAxML_bootstrap.all ]; then
+	mv RAxML_bootstrap.back.all RAxML_bootstrap.all
+fi
+
 if [ -s RAxML_bootstrap.all ]; then
 	donerep=`cat RAxML_bootstrap.all | grep ";" | wc -l`
 else
@@ -122,6 +131,8 @@ if [ "$donerep" -ne "$rep" ]; then
 	fi
 	if [ -s RAxML_bootstrap.all ]; then
 		cp RAxML_bootstrap.all RAxML_bootstrap.all.$l
+	elif [ -s RAxML_bootstrap.all.back ]; then
+		cp 
 	fi
 	rename "all" "back.all" *.all
 	rm RAxML_info.ml*
@@ -133,7 +144,22 @@ if [ "$donerep" -ne "$rep" ]; then
 			mv ../$in.phylip.BS* .
 			tar cfj bootstrap-reps.tbz --remove-files $in.phylip.BS*
 			l=0
-		fi
+		else
+			if [ -s RAxML_info.BS ]; then
+				seedb=$(cat RAxML_info.BS | grep "raxmlHPC -f j" | grep -oe "-b [0-9]* " | sed -e 's/-b //' | sed -e 's/ //g')
+				boot="-b $seedb"
+				echo $seedb
+			fi
+			mkdir bootstraps
+			cd bootstraps/
+			rm *
+			cp ../../$in.phylip .
+			$DIR/raxmlHPC -f j -s $in.phylip -n BS -m $model $boot -N $rep
+			tar cfj bootstrap-reps.tbz --remove-files $in.phylip*BS*
+			mv bootstrap-reps.tbz ../
+			mv RAxML_info.BS ../
+			cd ../
+		fi	
 		for bs in `seq $l $(( rep - 1 ))`; do
 			tar xfj bootstrap-reps.tbz $in.phylip.BS$bs
 			fasttree $ftmodel $in.phylip.BS$bs > fasttree.tre.BS$bs 2> ft.log.BS$bs;
