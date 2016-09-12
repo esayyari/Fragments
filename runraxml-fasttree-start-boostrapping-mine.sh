@@ -149,11 +149,16 @@ if [ "$donerep" -ne "$rep" ]; then
 				seedb=$(cat RAxML_info.BS | grep "raxmlHPC -f j" | grep -oe "-b [0-9]* " | sed -e 's/-b //' | sed -e 's/ //g')
 				boot="-b $seedb"
 				echo $seedb
+				boot="-b $RANDOM"
+				echo $boot
+				mv RAxML_info.BS RAxML_info.old.BS
 			fi
 			mkdir bootstraps
 			cd bootstraps/
 			rm *
 			cp ../../$in.phylip .
+			Date=$(date +%Y-%m-%d-%H-%M-%S)
+			mv ../bootstrap-reps.tbz ../bootstrap-reps.old-"$Date".tbz
 			$DIR/raxmlHPC -f j -s $in.phylip -n BS -m $model $boot -N $rep
 			tar cfj bootstrap-reps.tbz --remove-files $in.phylip*BS*
 			mv bootstrap-reps.tbz ../

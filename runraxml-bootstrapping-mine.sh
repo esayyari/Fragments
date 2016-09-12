@@ -80,18 +80,21 @@ cd $dirn
 
 
 #Figure out if main ML has already finished
-donebs=`grep "Overall execution time" RAxML_info.best`
+RAxML_bestTree.gene_tree.trees  RAxML_bootstrap.all.addPoly.rooted
+
+donebs=`grep ";" RAxML_bestTree.best | wc -l`
+#donebs=`grep "Overall execution time" RAxML_info.best`
 #Infer ML if not done yet
-if [ "$donebs" == "" ]; then
+if [ "$donebs" -ne "1" ]; then
 	rm RAxML*best.back
 	rename "best" "best.back" *best
 	raxmlHPC -m $model -n best -s ../$in.phylip $s -N 10
 fi
 
 #Figure out if bootstrapping has already finished
-donebs=`grep "Overall Time" RAxML_info.ml`
+donebs=`grep ";" RAxML_bootstrap.all | wc -l`
 #Bootstrap if not done yet
-if [ "$donebs" == "" ]; then
+if [ "$donebs" -ne "$rep" ]; then
 	crep=$rep
 	# if bootstrapping is partially done, resume from where it was left
 	if [ `ls RAxML_bootstrap.ml*|wc -l` -ne 0 ]; then
@@ -117,28 +120,30 @@ if [ ! `wc -l RAxML_bootstrap.all|sed -e "s/ .*//g"` -eq $rep ]; then
 else
  
 #Finalize
-	 
-	sed -i "s/'//g" RAxML_bestTree.best
-	sed -i "s/'//g" RAxML_bootstrap.all
-	sed -i "/^$/d" ../listRemoved.txt
-	if [ -s "../listRemoved.txt" ]; then
-		$DIR/addIdenticalTaxa.py RAxML_bestTree.best RAxML_bestTree.best.addPoly ../listRemoved.txt
-		sed -i 's/-/_/g' RAxML_bestTree.best.addPoly
-		$DIR/addIdenticalTaxa.py RAxML_bootstrap.all RAxML_bootstrap.all.addPoly ../listRemoved.txt
-		sed -i 's/-/_/g' RAxML_bootstrap.all.addPoly
-	else
-		cp RAxML_bestTree.best RAxML_bestTree.best.addPoly
-		cp RAxML_bootstrap.all RAxML_bootstrap.all.addPoly
-	fi	
-	sed -i "s/'//g" RAxML_bestTree.best.addPoly
-	sed -i "s/'//g" RAxML_bootstrap.all.addPoly
-	tmptmp=RAxML_bestTree.best.addPoly
-	rt=$(nw_labels -I $tmptmp | head -n 1)
-	nw_reroot RAxML_bestTree.best.addPoly $rt > RAxML_bestTree.best.addPoly.rooted
-	nw_reroot RAxML_bootstrap.all.addPoly $rt > RAxML_bootstrap.all.addPoly.rooted
-	nw_support -p RAxML_bestTree.best.addPoly.rooted RAxML_bootstrap.all.addPoly.rooted >> RAxML_bestTree.best.addPoly.rooted.final
+	doneml=`grep ";" RAxML_bestTree.best.addPoly.rooted.final | wc -l`;
+	if [ "$doneml" -ne "1" ]; then
+		sed -i "s/'//g" RAxML_bestTree.best
+		sed -i "s/'//g" RAxML_bootstrap.all
+		sed -i "/^$/d" ../listRemoved.txt
+		if [ -s "../listRemoved.txt" ]; then
+			$DIR/addIdenticalTaxa.py RAxML_bestTree.best RAxML_bestTree.best.addPoly ../listRemoved.txt
+			sed -i 's/-/_/g' RAxML_bestTree.best.addPoly
+			$DIR/addIdenticalTaxa.py RAxML_bootstrap.all RAxML_bootstrap.all.addPoly ../listRemoved.txt
+			sed -i 's/-/_/g' RAxML_bootstrap.all.addPoly
+		else
+			cp RAxML_bestTree.best RAxML_bestTree.best.addPoly
+			cp RAxML_bootstrap.all RAxML_bootstrap.all.addPoly
+		fi	
+		sed -i "s/'//g" RAxML_bestTree.best.addPoly
+		sed -i "s/'//g" RAxML_bootstrap.all.addPoly
+		tmptmp=RAxML_bestTree.best.addPoly
+		rt=$(nw_labels -I $tmptmp | head -n 1)
+		nw_reroot RAxML_bestTree.best.addPoly $rt > RAxML_bestTree.best.addPoly.rooted
+		nw_reroot RAxML_bootstrap.all.addPoly $rt > RAxML_bootstrap.all.addPoly.rooted
+		nw_support -p RAxML_bestTree.best.addPoly.rooted RAxML_bootstrap.all.addPoly.rooted >> RAxML_bestTree.best.addPoly.rooted.final
 # raxmlHPC -f b -m $model -n final -z fasttree.tre.BS-all.resolved -t fasttree.tre.best
-	tar cvfj logs.tar.bz --remove-files RAxML_log.* RAxML_parsimonyTree.best.RUN.* RAxML_bootstrap.ml RAxML_result.best.RUN.*RAxML_bootstrap.ml*
-	cd ..
-	echo "Done">.done.$dirn
+		tar cvfj logs.tar.bz --remove-files RAxML_log.* RAxML_parsimonyTree.best.RUN.* RAxML_bootstrap.ml RAxML_result.best.RUN.*RAxML_bootstrap.ml*
+		cd ..
+		echo "Done">.done.$dirn
+	fi
 fi
