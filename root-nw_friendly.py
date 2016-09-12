@@ -16,8 +16,8 @@ hdir=os.path.dirname(os.path.realpath(__file__))
 ROOTS = [
         ["IXODES_SCAPULARIS"],
         ["Symphylella_vulgaris","Glomeris_pustulata"],
-        ["Lepeophtheirus_salmonis","DAPHNIA_PULEX"],["Cypridininae_sp","Sarsinebalia_urgorii","Celuca_puligator","Litopenaeus_vannamei"]
-        ]
+        ["Lepeophtheirus_salmonis","DAPHNIA_PULEX"],["Cypridininae_sp","Sarsinebalia_urgorii","Celuca_puligator","Litopenaeus_vannamei"]]
+        #["Anopheles_gambiae","Aedes_aegypti","Phlebotomus_papatasi","Tipula_maxima","Trichocera_fuscata","Bibio_marci","Bombylius_major","Drosophila_melanogaster","Lipara_lucens","Rhagoletis_pomonella","Glossina_morsitans","Sarcophaga_crassipalpis","Triarthria_setipennis"]]
 
 def root (rootgroup, tree):
     root = None
@@ -60,7 +60,7 @@ if __name__ == '__main__':
     
     c={}
 
-    trees = dendropy.TreeList.get_from_path(treeName, 'newick',rooting="force-rooted", preserve_underscores=True)
+    trees = dendropy.TreeList.get_from_path(treeName,'newick',rooting="force-rooted",preserve_underscores=True)
     for i,tree in enumerate(trees):
 	roots = ROOTS
         while roots and root(roots[0],tree) is None:

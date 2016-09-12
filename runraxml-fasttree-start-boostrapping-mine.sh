@@ -37,7 +37,7 @@ mkdir logs
 $DIR/convert_to_phylip.sh $in.fasta $in.phylip
 
 test "`head -n 1 $in.phylip`" == "0 0" && exit 1
-$DIR/listRemovedTaxa.py $in.phylip ../listRemoved.txt
+$DIR/listRemovedTaxa.py $in.phylip listRemoved.txt
 if [ "$DT" == "FAA" ]; then
         raxmlHPC  -s $in.phylip -f j -b $RANDOM -n BS -m PROTGAMMAJTT -# 2
 else
