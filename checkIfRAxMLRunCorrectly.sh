@@ -8,6 +8,8 @@
 #	a=$(cd $y/$b; tar xvf `basename $x`); 
 #	echo $x; 
 #done 
+cd /oasis/projects/nsf/uot138/esayyari/data/Insects/genes/filtered/10sites-33taxa/long-branch-filtered-2016-08-18-16-30-10-not-backuped/
+pwd
 
 for y in `find ALIC*/FAA-*-raxml/raxmlboot.FAA-*/ -type d -name "bootstrap-files"`; do 
 	for i in `seq 0 99`; do 
