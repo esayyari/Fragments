@@ -21,9 +21,10 @@ st=$8
 bs=$9
 
 OMP_NUM_THREADS=1
-L=/oasis/scratch/comet/esayyari/temp_project/Insects
-cd $L
-tmpdir=$L/$H/$ID/$DT-$ALGNAME-raxml
+#L=/oasis/scratch/comet/esayyari/temp_project/Insects
+#cd $L
+#tmpdir=$L/$H/$ID/$DT-$ALGNAME-raxml
+tmpdir=$H/$ID/$DT-$ALGNAME-raxml
 mkdir -p $tmpdir
 S=raxml
 in=$DT-$ALGNAME
@@ -118,6 +119,6 @@ python $DIR/arb_resolve_polytomies.py fasttree.tre.BS$bs
 raxmlHPC -F -t fasttree.tre.BS$bs.resolved -m $model -n ml.BS$bs -s $in.phylip.BS$bs -N 1  $s &> $tmpdir/logs/ml_std.errout."$bs"."$in"
 test $? == 0 || { echo in running RAxML on bootstrap trees; exit 1; }
 rm $in.phylip.BS$bs*
-tar rvf bootstrap-files.tar --remove-files *BS$bs *BS$bs.*
+tar rvf bootstrap-files.tar --remove-files *BS$bs *BS$bs* 
 
 
