@@ -1,13 +1,13 @@
 #!/bin/bash
 
-#for x in `find . -name "bootstrap-files.tar"`; do 
-#	y=$(dirname $x); 
-#	b=$(basename $x| sed -e 's/.tar//'); 
-#	mkdir $y/$b; 
-#	mv $x $y/$b; 
-#	a=$(cd $y/$b; tar xvf `basename $x`); 
-#	echo $x; 
-#done 
+for x in `find . -name "bootstrap-files.tar"`; do 
+	y=$(dirname $x); 
+	b=$(basename $x| sed -e 's/.tar//'); 
+	mkdir $y/$b; 
+	cp $x $y/$b; 
+	a=$(cd $y/$b; tar xvf `basename $x`); 
+	echo $x; 
+done 
 
 for y in `find ALIC*/FAA-*-raxml/raxmlboot.FAA-*/ -type d -name "bootstrap-files"`; do 
 	for i in `seq 0 99`; do 
