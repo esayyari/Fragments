@@ -20,9 +20,7 @@ H=${7}
 st=$8
 
 OMP_NUM_THREADS=1
-L=/oasis/scratch/comet/esayyari/temp_project/Insects
-cd $L
-tmpdir=$L/$H/$ID/$DT-$ALGNAME-raxml
+tmpdir=$H/$ID/$DT-$ALGNAME-raxml
 mkdir -p $tmpdir
 S=raxml
 in=$DT-$ALGNAME
@@ -188,7 +186,6 @@ elif [ `cat RAxML_bootstrap.all |wc -l` -ne $rep ]; then
 		kdifrep=$(cat tmp.diff | wc -l)
 		krep=$(cat RAxML_bootstrap.back.all | wc -l)
 		if [ "$kdifrep" -eq "$krep"  ];
-			
 			cat RAxML_bootstrap.all >> RAxML_bootstrap.back.all;
 			mv RAxML_bootstrap.back.all RAxML_bootstrap.all
 		else
