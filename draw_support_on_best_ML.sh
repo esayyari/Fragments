@@ -20,22 +20,17 @@ H=${7}
 st=$8
 
 OMP_NUM_THREADS=1
-L=/oasis/scratch/comet/esayyari/temp_project/Insects
-cd $L
-tmpdir=$L/$H/$ID/$DT-$ALGNAME-raxml
+tmpdir=$H/$ID/$DT-$ALGNAME-raxml
 mkdir -p $tmpdir
 S=raxml
 in=$DT-$ALGNAME
 boot="-b $RANDOM"
 s="-p $RANDOM"
 dirn=raxmlboot.$in.$label
-
-
 cd $tmpdir
+cd $dirn
 
-
-#Finalize
-k=$(cat RAxML_result.ml | sort | uniq | grep ";" | wc -l)	 
+k=$(cat RAxML_result.ml | grep ";" | wc -l)	 
 if [ "$k" -eq "$rep" ]; then
 	cat RAxML_result.ml > RAxML_bootstrap.all
 	sed -i "s/'//g" RAxML_bestTree.best
@@ -57,6 +52,8 @@ if [ "$k" -eq "$rep" ]; then
 	nw_reroot RAxML_bestTree.best.addPoly $rt > RAxML_bestTree.best.addPoly.rooted
 	nw_reroot RAxML_bootstrap.all.addPoly $rt > RAxML_bootstrap.all.addPoly.rooted
 	nw_support -p RAxML_bestTree.best.addPoly.rooted RAxML_bootstrap.all.addPoly.rooted >> RAxML_bestTree.best.addPoly.rooted.final.fasttree
+	rm RAxML*final.RAxML
+	model="PROTGAMMALG"
 	raxmlHPC -f b -m $model -n final.RAxML -z RAxML_bootstrap.all.addPoly.rooted -t RAxML_bestTree.best.addPoly.rooted
 	tar cvfj logs.tar.bz --remove-files RAxML_log.* RAxML_parsimonyTree.best.RUN.* RAxML_bootstrap.ml RAxML_result.best.RUN.*RAxML_bootstrap.ml*
 	cd ..
