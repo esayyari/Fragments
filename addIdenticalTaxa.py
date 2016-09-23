@@ -38,6 +38,7 @@ for line in f:
 				tre.taxon_namespace.add_taxon(taxon_1)
 			# Create a new node and assign a taxon OBJECT to it (not a label)
 			n = dendropy.Node(taxon=taxon_1, label=t)
+			n.edge.length = Nd.edge.length 
 			Nd.parent_node.insert_child(0, n)
 	trees.append(tre)
 trees.write(
