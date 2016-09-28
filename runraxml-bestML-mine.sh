@@ -7,7 +7,7 @@ module load python
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 H=$WORK/1kp/capstone/secondset
 
-test $# == 8 || exit 1
+test $# == 5 || exit 1
 
 ALGNAME=$1
 DT=$2

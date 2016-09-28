@@ -50,12 +50,7 @@ if __name__ == '__main__':
 
     treeName = sys.argv[1]
     SD=int(sys.argv[2])
-<<<<<<< HEAD
-    meth=sys.argv[3]
-    print SD
-=======
     method=sys.argv[3]
->>>>>>> 4f1be1dbb3cc943f3843ec8d5c76838f9b59a471
     c={}
     for x in open(os.path.join(hdir,"annotate.txt")):
 	print x.split('\t')[2][0:-1]
