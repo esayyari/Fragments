@@ -47,5 +47,5 @@ else
 	submodel=DNA
 fi
 
-if [ $g -gt 1 ]; then while read x; do l=$(echo $x | awk '{print $2}' | sed -e "s/binning_50//"); newmodel=$(cat $l*/*-raxml/bestModel* | sed -e "s/.* //g"); p=$(echo $x | awk '{print $2}'); y=$(basename $p);  h=$(echo $x | awk '{print $3,$4}'); printf "$newmodel, $y $h\n"; done <bin.41/supergene.part; fi
+while read i; do g=$(cat $i/supergene.part | wc -l); if [ $g -gt 1 ]; then while read x; do l=$(echo $x | awk '{print $2}' | sed -e "s/binning_50//"); newmodel=$(cat $l*/*-raxml/bestModel* | sed -e "s/.* //g"); p=$(echo $x | awk '{print $2}'); y=$(basename $p);  h=$(echo $x | awk '{print $3,$4}'); printf "$newmodel, $y $h\n"; done < $i/supergene.part; fi; done < running_replicates.txt
 
