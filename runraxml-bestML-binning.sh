@@ -16,16 +16,16 @@ label=$4
 H=${5}
 
 OMP_NUM_THREADS=1
-tmpdir=$H/$ID/$DT-$ALGNAME-raxml
+tmpdir=$H/$ID/$ALGNAME-raxml
 mkdir -p $tmpdir
 S=raxml
-in=$DT-$ALGNAME
+in=$ALGNAME
 boot="-b $RANDOM"
 s="-p $RANDOM"
 dirn=raxmlboot.$in.$label
 
 cp $H/$ID/$in.fasta $tmpdir/$in.fasta
-
+cp $H/$ID/$in.part.partitioned $tmpdir/
 cd $tmpdir
 pwd
 mkdir logs
@@ -34,18 +34,18 @@ $DIR/convert_to_phylip.sh $in.fasta $in.phylip
 
 test "`head -n 1 $in.phylip`" == "0 0" && exit 1
 $DIR/listRemovedTaxa.py $in.phylip listRemoved.txt
-if [ "$DT" == "FAA" ]; then
-        raxmlHPC  -s $in.phylip -f j -b $RANDOM -n BS -m PROTGAMMAJTT -# 2
-else
-        raxmlHPC  -s $in.phylip -f j -b $RANDOM -n BS -m  GTRGAMMA -# 2
-fi
-if [ -s "$in.phylip.reduced" ]; then
-	mv $in.phylip.reduced $in.phylip
-fi
+#if [ "$DT" == "FAA" ]; then
+#        raxmlHPC  -s $in.phylip -f j -b $RANDOM -n BS -m PROTGAMMAJTT -# 2
+#else
+#        raxmlHPC  -s $in.phylip -f j -b $RANDOM -n BS -m  GTRGAMMA -# 2
+#fi
+#if [ -s "$in.phylip.reduced" ]; then
+#	mv $in.phylip.reduced $in.phylip
+#fi
 rm RAxML_info.BS
 
 if [ "$DT" == "FAA" ]; then
-	if [ -s supergene.part.bestmodel ]; then
+	if [ -s supergene.part.partitioned ]; then
 		echo bestModel.$ALGNAME
 	else
 		echo model selection failed. check the log file
@@ -66,11 +66,11 @@ donebs=`grep "Overall execution time" RAxML_info.best`
 #Infer ML if not done yet
 if [ "$donebs" == "" ]; then
 	rm RAxML*best.back
-	rename "best" "best.back" *best
+	rename "best" "best.back" *best.partitioned
 	if [ $CPUS -eq 1 ]; then	
-		raxmlHPC -m $model -M -q ../supergene.part.bestmodel -n best.partitioned -s ../$in.phylip $s -N 10 &> ../logs/best_std.errorout.$in
+		raxmlHPC -O -m $model -M -q ../supergene.part.partitioned -n best.partitioned -s ../$in.phylip $s -N 10 &> ../logs/best_std.errorout.$in
 	else
-		raxmlHPC-PTHREADS -T $CPUS -M -m $model -q ../supergene.part.bestmodel -n best.partitioned -s ../$in.phylip $s -N 10 &> ../logs/best_std.errorout.$in
+		raxmlHPC-PTHREADS -O -T $CPUS -M -m $model -q ../supergene.part.partitioned -n best.partitioned -s ../$in.phylip $s -N 10 &> ../logs/best_std.errorout.$in
 	fi
 fi
  

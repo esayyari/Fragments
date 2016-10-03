@@ -18,7 +18,6 @@ ROOTS = [
         ["Symphylella_vulgaris","Glomeris_pustulata"],
         ["Lepeophtheirus_salmonis","DAPHNIA_PULEX"],["Cypridininae_sp","Sarsinebalia_urgorii","Celuca_puligator","Litopenaeus_vannamei"]]
         #["Anopheles_gambiae","Aedes_aegypti","Phlebotomus_papatasi","Tipula_maxima","Trichocera_fuscata","Bibio_marci","Bombylius_major","Drosophila_melanogaster","Lipara_lucens","Rhagoletis_pomonella","Glossina_morsitans","Sarcophaga_crassipalpis","Triarthria_setipennis"]]
-
 def root (rootgroup, tree):
     root = None
     bigest = 0

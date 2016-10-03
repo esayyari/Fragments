@@ -51,7 +51,7 @@ if [ "$k" -eq "$rep" ]; then
 	rt=$(nw_labels -I $tmptmp | head -n 1)
 	nw_reroot RAxML_bestTree.best.addPoly $rt > RAxML_bestTree.best.addPoly.rooted
 	nw_reroot RAxML_bootstrap.all.addPoly $rt > RAxML_bootstrap.all.addPoly.rooted
-	nw_support -p RAxML_bestTree.best.addPoly.rooted RAxML_bootstrap.all.addPoly.rooted >> RAxML_bestTree.best.addPoly.rooted.final.fasttree
+	nw_support -p RAxML_bestTree.best.addPoly.rooted RAxML_bootstrap.all.addPoly.rooted > RAxML_bestTree.best.addPoly.rooted.final.fasttree
 	rm RAxML*final.RAxML
 	model="PROTGAMMALG"
 	raxmlHPC -f b -m $model -n final.RAxML -z RAxML_bootstrap.all.addPoly.rooted -t RAxML_bestTree.best.addPoly.rooted
