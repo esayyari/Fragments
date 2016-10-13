@@ -6,16 +6,24 @@ f=$s/$1/$algfn
 percent=$2
 taxapercent=$3
 out=$f.mask${percent}sites.mask${taxapercent}taxa.fasta
-
+m=$(cat $align | grep -o "FNA\|FAA")
 test $# == 5 || { echo  USAGE: gene site_percent taxa_percent file_name; exit 1;  }
 tmp=`mktemp`
 while read x; do
-y=$(echo $x | grep ">")
-if [ "$y" == "" ]; then 
-echo $x | sed -e 's/N\|X/-/g' >> $tmp
-else
-echo $x >> $tmp
-fi
+	y=$(echo $x | grep ">")
+	if [ "$m" == "FNA" ]; then
+		if [ "$y" == "" ]; then 
+			echo $x | sed -e 's/N/-/g' >> $tmp
+		else
+			echo $x >> $tmp
+		fi
+	else
+		if [ "$y" == "" ]; then 
+			echo $x | sed -e 's/X/-/g' >> $tmp
+		else
+			echo $x >> $tmp
+		fi
+	fi
 done < $f
 mv $tmp $f-frag-rem
 m=`echo $( grep ">" $f-frag-rem|wc -l ) \* $percent / 100 |bc`
