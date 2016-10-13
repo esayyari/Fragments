@@ -1,17 +1,23 @@
 #!/bin/bash
 
-algfn=$4
-s=$5
-f=$s/$1/$algfn
-percent=$2
-taxapercent=$3
-out=$f.mask${percent}sites.mask${taxapercent}taxa.fasta
-m=$(cat $align | grep -o "FNA\|FAA")
+
+
+s=$1
+ID=$2
+algfn=$3
+DT=$4
+percent=$5
+taxapercent=$6
+f=$s/$ID/$DT-$algfn
+mkdir $s/$ID/$DT-$algfn-mask${percent}sites.mask${taxapercent}taxa
+diroutput=$s/$ID/$DT-$algfn-mask${percent}sites.mask${taxapercent}taxa
+out=$diroutput/$f.mask${percent}sites.mask${taxapercent}taxa.fasta
+
 test $# == 5 || { echo  USAGE: gene site_percent taxa_percent file_name; exit 1;  }
 tmp=`mktemp`
 while read x; do
 	y=$(echo $x | grep ">")
-	if [ "$m" == "FNA" ]; then
+	if [ "$DT" == "FNA" ]; then
 		if [ "$y" == "" ]; then 
 			echo $x | sed -e 's/N/-/g' >> $tmp
 		else
@@ -24,7 +30,7 @@ while read x; do
 			echo $x >> $tmp
 		fi
 	fi
-done < $f
+done < $f.fasta
 mv $tmp $f-frag-rem
 m=`echo $( grep ">" $f-frag-rem|wc -l ) \* $percent / 100 |bc`
 $WS_HOME/pasta/pasta/run_seqtools.py -infile $f-frag-rem -masksites $m -outfile $f-frag-rem.mask${percent}sites.fasta
