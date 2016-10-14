@@ -1,5 +1,5 @@
 #!/bin/bash
-test $# == 4 || { echo  USAGE: outpath geneID seqtype alignnameexit 1;  }
+test $# == 4 ||  echo  USAGE: $0 outpath geneID seqtype align && exit 1
 s=$1
 ID=$2
 DT=$3

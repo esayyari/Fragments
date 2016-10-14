@@ -16,8 +16,11 @@ for x in `find $dir -maxdepth 1 -mindepth 1 -type d -name "[A-Za-z0-9]*"`; do
 	#cp $dir/$y/$y"."$suffix $outdir/$y/$DT-$y.fasta
 	if [ $DT == "FNA" ]; then
 		$DIR/remove_3rd_codon_nt_fas.sh -i $outdir/$y/$DT-$y.fasta 
+		$DIR/generate_fragmentary_stat.sh $outdir $y"-rm-3rdCodon" $DT 
+		$DIR/gc-stats.py $outdir/$y/$DT-$y-rm-3rdCodon.fasta 
 		echo $y"-rm-3rdCodon" >> $tmp
 	else
+		$DIR/generate_fragmentary_stat.sh $outdir $y $DT
 		echo $y >>  $tmp
 	fi
 done 
