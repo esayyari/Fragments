@@ -21,8 +21,9 @@ while getopts "hi:" opt; do
                 ;;
         esac
 done
-
-o="$i"-"rm"-3rdCodon
+b=$(basename $i | sed -e 's/.fasta//')
+d=$(dirname $i)
+o=$d/$b"-rm-3rdCodon.fasta"
 echo $o
 tmp=`mktemp`
 cat $i | sed -e 's/>\(.*\)/#>\1@/g' | tr -d "\n" | tr "\#" "\n" > $tmp

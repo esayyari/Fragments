@@ -4,8 +4,8 @@
 
 s=$1
 ID=$2
-algfn=$3
-DT=$4
+DT=$3
+algfn=$4
 percent=$5
 taxapercent=$6
 f=$s/$ID/$DT-$algfn
@@ -13,7 +13,7 @@ mkdir $s/$ID/$DT-$algfn-mask${percent}sites.mask${taxapercent}taxa
 diroutput=$s/$ID/$DT-$algfn-mask${percent}sites.mask${taxapercent}taxa
 out=$diroutput/$f.mask${percent}sites.mask${taxapercent}taxa.fasta
 
-test $# == 5 || { echo  USAGE: gene site_percent taxa_percent file_name; exit 1;  }
+test $# == 6 || { echo  USAGE: outpath geneID seqtype alignname site_percent taxa_percent exit 1;  }
 tmp=`mktemp`
 while read x; do
 	y=$(echo $x | grep ">")
