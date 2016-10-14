@@ -107,7 +107,7 @@ if [ ! `wc -l fasttree.tre.BS-all |sed -e "s/ .*//g"` -eq $rep ]; then
 	exit 1
 else
  #Finalize
-	 
+	sed -i "/^$/d" ../listRemoved.txt
 	sed -i "s/'//g" fasttree.tre.best
 	sed -i "s/'//g" fasttree.tre.BS-all
 	if [ -s "../listRemoved.txt" ]; then
@@ -129,8 +129,10 @@ else
 # raxmlHPC -f b -m $model -n final -z fasttree.tre.BS-all.resolved -t fasttree.tre.best
 
 	tar cfj $H/$ID/$DT-$ALGNAME-genetrees.tar.bz.$rnd $tmpdir 
-	cd $H/$ID/
-	cd ..
+	mkdir -p $H/$ID/$DT-$ALGNAME
+	cd $H/$ID/$DT-$ALGNAME
+	cp $tmpdir/fasttree.tre.best.addPoly.rooted.final $H/$ID/$DT-$ALGNAME/
+	cp $tmpdir/ft.log.BS-all $H/$ID/$DT-$ALGNAME/
 	echo "Done">.done.$dirn
 fi
 rm -r $tmpdir

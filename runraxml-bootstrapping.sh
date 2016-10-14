@@ -122,6 +122,7 @@ else
 #Finalize
 	doneml=`grep ";" RAxML_bestTree.best.addPoly.rooted.final | wc -l`;
 	if [ "$doneml" -ne "1" ]; then
+		sed -i "/^$/d" ../listRemoved.txt
 		sed -i "s/'//g" RAxML_bestTree.best
 		sed -i "s/'//g" RAxML_bootstrap.all
 		sed -i "/^$/d" ../listRemoved.txt
