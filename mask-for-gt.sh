@@ -9,9 +9,9 @@ algfn=$4
 percent=$5
 taxapercent=$6
 f=$s/$ID/$DT-$algfn
-mkdir $s/$ID/$DT-$algfn-mask${percent}sites.mask${taxapercent}taxa
+mkdir -p $s/$ID/$DT-$algfn-mask${percent}sites.mask${taxapercent}taxa
 diroutput=$s/$ID/$DT-$algfn-mask${percent}sites.mask${taxapercent}taxa
-out=$diroutput/$f.mask${percent}sites.mask${taxapercent}taxa.fasta
+out=$diroutput/$DT-$algfn-mask${percent}sites.mask${taxapercent}taxa.fasta
 
 test $# == 6 || { echo  USAGE: outpath geneID seqtype alignname site_percent taxa_percent exit 1;  }
 tmp=`mktemp`
@@ -32,11 +32,16 @@ while read x; do
 	fi
 done < $f.fasta
 mv $tmp $f-frag-rem
-m=`echo $( grep ">" $f-frag-rem|wc -l ) \* $percent / 100 |bc`
-$WS_HOME/pasta/pasta/run_seqtools.py -infile $f-frag-rem -masksites $m -outfile $f-frag-rem.mask${percent}sites.fasta
-echo From `$WS_HOME/insects/simplifyfasta.sh $f-frag-rem|wc -L` sites in $f-frag-rem to `wc -L $f-frag-rem.mask${percent}sites.fasta` sites
+m=`echo $( grep ">" $f"-frag-rem"|wc -l ) \* $percent / 100 |bc`
+$WS_HOME/pasta/run_seqtools.py -infile $f-frag-rem -masksites $m -outfile $f-frag-rem.mask${percent}sites.fasta >> $diroutput/log-$DT-$algfn-mask${percent}sites.mask${taxapercent}taxa.error 2>&1
+
+a=$($WS_HOME/insects/simplifyfasta.sh $f-frag-rem|wc -L)
+b=$(cat $f-frag-rem.mask${percent}sites.fasta | wc -L)
+echo From $a sites in $f-frag-rem to $b sites >> $diroutput/log-$DT-$algfn-mask${percent}sites.mask${taxapercent}taxa.error 2>&1
 
 m2=`echo $( cat $f-frag-rem.mask${percent}sites.fasta|wc -L ) \* $taxapercent / 100 |bc`
-$WS_HOME/pasta/pasta/run_seqtools.py -infile $f-frag-rem.mask${percent}sites.fasta -filterfragments $m2 -outfile $out
+$WS_HOME/pasta/run_seqtools.py -infile $f-frag-rem.mask${percent}sites.fasta -filterfragments $m2 -outfile $out >> $diroutput/log-$DT-$algfn-mask${percent}sites.mask${taxapercent}taxa.error 2>&1
 
-echo went from `grep ">" $f-frag-rem|wc -l` to `grep ">" $out|wc -l` sequences
+rm $f-frag-rem.mask${percent}sites.fasta
+echo went from `grep ">" $f-frag-rem|wc -l` to `grep ">" $out|wc -l` sequences >> $diroutput/log-$DT-$algfn-mask${percent}sites.mask${taxapercent}taxa.error 2>&1
+

@@ -6,17 +6,14 @@ module load python
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
-test $# == 8 || exit 1
+test $# == 6 || exit 1
 
 ALGNAME=$1
 DT=$2
-CPUS=1
 ID=$3
 label=$4
 rep=$5
-rapid=$6 # use rapid for rapid bootstrapping or anything else for default
-H=${7}
-st=$8
+H=${6}
 
 OMP_NUM_THREADS=1
 tmpdir=$H/$ID/$DT-$ALGNAME-raxml

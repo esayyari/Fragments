@@ -16,7 +16,7 @@ cat $2/*/$searchP/*/*/fasttree.tre.best.addPoly.rooted.final > $y.gene_trees.tre
 x=$y.gene_trees.trees
 
 python $DIR/root-nw_friendly.py $x
-python $DIR/find-long-branches-2.py $x.rerooted $med $method> filter-lb-$med-$method-$x
+python $DIR/find-long-branches.py $x.rerooted $med $method> filter-lb-$med-$method-$x
 
 paste <(cat list-$med-$metho-$y) <(cat  filter-lb-$med-$method-$x  | tr '\n' ';' | sed -e 's/;;/\n/g' |  sed -e 's/: [^;]*;//' | sed -e 's/[0-9.]*;/ /g'  | sed -e 's/ [0-9.]*$//' | sed -e 's/  / /g' | tr ' ' ',')  | grep -v ":" | sed -e 's/\t/ /g'  | sed -e 's/ [0-9]*,/ /' | sed -e 's/,/ /g' | awk '{for(i=2;i<=NF;i++){print $1,$i}}' > rem-lb-$med-$method-$x
 

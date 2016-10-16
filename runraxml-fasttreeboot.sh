@@ -25,7 +25,7 @@ if test "$rapid" == "rapid"; then boot="-x $RANDOM"; else boot="-b $RANDOM"; fi
 s="-p $RANDOM"
 dirn=raxmlboot.$in.$label
 
-cp $H/$ID/$in.fasta $tmpdir/$in.fasta
+cp $H/$ID/$in/$in.fasta $tmpdir/$in.fasta
 
 cd $tmpdir
 pwd
@@ -128,11 +128,13 @@ else
 	nw_support -p fasttree.tre.best.addPoly.rooted fasttree.tre.BS-all.addPoly.rooted >> fasttree.tre.best.addPoly.rooted.final
 # raxmlHPC -f b -m $model -n final -z fasttree.tre.BS-all.resolved -t fasttree.tre.best
 
-	tar cfj $H/$ID/$DT-$ALGNAME-genetrees.tar.bz.$rnd $tmpdir 
-	mkdir -p $H/$ID/$DT-$ALGNAME
-	cd $H/$ID/$DT-$ALGNAME
-	cp $tmpdir/fasttree.tre.best.addPoly.rooted.final $H/$ID/$DT-$ALGNAME/
-	cp $tmpdir/ft.log.BS-all $H/$ID/$DT-$ALGNAME/
+	mkdir -p $H/$ID/$in/$DT-$ALGNAME
+	cp $tmpdir/$dirn/fasttree.tre.best.addPoly.rooted.final $H/$ID/$in/$DT-$ALGNAME/
+	cp $tmpdir/$dirn/ft.log.BS-all $H/$ID/$in/$DT-$ALGNAME/
+	
+	tar cfj $H/$ID/$in/$DT-$ALGNAME-genetrees.tar.bz.$rnd $tmpdir 
+	
+	cd $H/$ID/$in/$DT-$ALGNAME
 	echo "Done">.done.$dirn
 fi
-rm -r $tmpdir
+#rm -r $tmpdir
