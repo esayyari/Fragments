@@ -1,5 +1,5 @@
 #!/bin/bash
-
+site=$1
 taxa=$2
 work_dir=$3
 DT=$4

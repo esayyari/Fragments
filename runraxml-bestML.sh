@@ -5,8 +5,7 @@ set -x
 module load python
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-H=$WORK/1kp/capstone/secondset
-
+echo $DIR
 test $# == 5 || exit 1
 
 ALGNAME=$1
@@ -25,7 +24,7 @@ boot="-b $RANDOM"
 s="-p $RANDOM"
 dirn=raxmlboot.$in.$label
 
-cp $H/$ID/$in.fasta $tmpdir/$in.fasta
+cp $H/$ID/$DT-$ALGNAME/$in.fasta $tmpdir/$in.fasta
 
 cd $tmpdir
 pwd
@@ -90,6 +89,7 @@ sed -i "/^$/d" ../listRemoved.txt
 if [ -s "../listRemoved.txt" ]; then
 	$DIR/addIdenticalTaxa.py RAxML_bestTree.best RAxML_bestTree.best.addPoly ../listRemoved.txt
 	sed -i 's/-/_/g' RAxML_bestTree.best.addPoly
+	sed -i 's/e_\([0-9]\)/e-\1/g' RAxML_bestTree.best.addPoly
 else
 	cp RAxML_bestTree.best RAxML_bestTree.best.addPoly
 fi	
