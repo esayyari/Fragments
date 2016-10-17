@@ -53,7 +53,7 @@ if __name__ == '__main__':
     method=sys.argv[3]
     c={}
     for x in open(os.path.join(hdir,"annotate.txt")):
-	print x.split('\t')[2][0:-1]
+	#print x.split('\t')[2][0:-1]
         c[x.split('\t')[0]] = x.split('\t')[2][0:-1]
 
     trees = dendropy.TreeList.get_from_path(treeName, 'newick',rooting="force-rooted", preserve_underscores=True)
@@ -62,8 +62,8 @@ if __name__ == '__main__':
         med = median(disrt)
 	avg = mean(disrt)
         std = pstdev(disrt)
-        print i+1,":", med, avg, std, SD * std + med, SD * sdt + avg
-	if method == "sd":        
+        print i+1,":", med, avg, std, SD * std + med, SD * std + avg
+	if method == "med":        
 		for n in tree.leaf_node_iter():
         	    if med  + SD * std < n.distance_from_root():
                 	print n.taxon.label,  n.distance_from_root()

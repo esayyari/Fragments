@@ -123,6 +123,8 @@ else
 	sed -i "s/'//g" fasttree.tre.BS-all.addPoly
 	tmptmp=fasttree.tre.best.addPoly
 	rt=$(nw_labels -I $tmptmp | head -n 1)
+	sed -i 's/e_\([0-9]\)/e-\1/g' fasttree.tre.best.addPoly
+	sed -i 's/e_\([0-9]\)/e-\1/g' fasttree.tre.BS-all.addPoly
 	nw_reroot fasttree.tre.best.addPoly $rt > fasttree.tre.best.addPoly.rooted
 	nw_reroot fasttree.tre.BS-all.addPoly $rt > fasttree.tre.BS-all.addPoly.rooted
 	nw_support -p fasttree.tre.best.addPoly.rooted fasttree.tre.BS-all.addPoly.rooted >> fasttree.tre.best.addPoly.rooted.final
