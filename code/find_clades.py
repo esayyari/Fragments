@@ -96,6 +96,7 @@ class Mono(object):
             r = line.split('\t')
             if r[0] == 'Clade Name':
                 continue
+	    print r[0]
             clade=set()
             sign="+"
             for x in re.split("([+|-])",r[1]):
@@ -113,6 +114,7 @@ class Mono(object):
                     print "In %s, %s is not defined before" %(r[0],e.args[0])
                     sys.exit(1)
             clade = list(clade)
+	    print r
             components=r[4].strip().split("+") if r[4] != "" else []
             name = r[0]
             self.letters[name] = r[3]
