@@ -4,7 +4,7 @@ set -x
 
 module load python
 
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+DIR=$WS_HOME/insects/
 echo $DIR
 test $# == 6 || exit 1
 
@@ -75,6 +75,7 @@ cd $dirn
 
 #Figure out if main ML has already finished
 donebs=`grep "Overall execution time" RAxML_info.best`
+
 #Infer ML if not done yet
 if [ "$donebs" == "" ]; then
 	rm RAxML*best.back
@@ -84,8 +85,16 @@ if [ "$donebs" == "" ]; then
 	else
 		raxmlHPC -m $model -n best -s ../$in.phylip $s -N 10 &> ../logs/best_std.errorout.$in
 	fi
+else
+	echo "computing bestML was done previousely"	
 fi
- 
+if [ -s RAxML_bestTree.best.addPoly ]; then
+	g=$(cat RAxML_bestTree.best.addPoly | grep ";" | wc -l)
+	if [ "$g" -eq 1 ]; then
+		echo "bestML was done previousely";
+		exit 0;
+	fi
+fi
 #Figure out if bootstrapping has already finished
 sed -i "s/'//g" RAxML_bestTree.best
 sed -i "s/'//g" RAxML_bootstrap.all

@@ -26,7 +26,7 @@ fi
 for x in `find $dir -maxdepth 1 -mindepth 1 -type d -name "[A-Za-z0-9]*"`; do
 	y=$(basename $x);
 	mkdir -p $outdir/$y
-	#cp $dir/$y/$y"."$suffix $outdir/$y/$DT-$y.fasta
+	cp $dir/$y/$y"."$suffix $outdir/$y/$DT-$y.fasta
 	if [ $DT == "FNA" ]; then
 		printf "$DIR/remove_3rd_codon_nt_fas.sh -i $outdir/$y/$DT-$y.fasta \n " >> $DT-3rdCodonRemoval.jobs
 		printf "$DIR/generate_fragmentary_stat.sh $outdir $y $DT $y"-rm-3rdCodon" \n " >> $DT-statReport.jobs
