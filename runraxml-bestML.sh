@@ -6,11 +6,11 @@ module load python
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 echo $DIR
-test $# == 5 || exit 1
+test $# == 6 || exit 1
 
 ALGNAME=$1
 DT=$2
-CPUS=1
+CPU=$6
 ID=$3
 label=$4
 H=${5}
@@ -79,7 +79,11 @@ donebs=`grep "Overall execution time" RAxML_info.best`
 if [ "$donebs" == "" ]; then
 	rm RAxML*best.back
 	rename "best" "best.back" *best
-	raxmlHPC -m $model -n best -s ../$in.phylip $s -N 10 &> ../logs/best_std.errorout.$in
+	if [ $CPU -ne "1" ]; then
+		raxmlHPC-PTHREADS -T $CPU -m $model -n best -s ../$in.phylip $s -N 10 &> ../logs/best_std.errorout.$in
+	else
+		raxmlHPC -m $model -n best -s ../$in.phylip $s -N 10 &> ../logs/best_std.errorout.$in
+	fi
 fi
  
 #Figure out if bootstrapping has already finished
