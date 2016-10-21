@@ -13,15 +13,17 @@ fi
 for id in `find $path -maxdepth 1 -mindepth 1 -type d -name "*" | sort`; do  
 	while read y; do
 		while read z; do
-			while read x; do
-			DT=FAA; 
-			ID=$(basename $id); 
-			echo $ID
-			label=tre; 
-			H=$path; 
-			ALGNAME=$ID-mask"$y"sites.mask"$z"taxa-$x-filtered-long-branch; 
-			printf "$WS_HOME/insects/runraxml-bestML.sh $ALGNAME FAA $ID $label $H $CPU \n" >> $DT-raxml-bestML-gene_trees.jobs;
-			done < $suffix
+			ID=$(basename $id);
+			H=$path
+			if [ -s $suffix ]; then
+				while read x; do 
+					ALGNAME=$ID-mask"$y"sites.mask"$z"taxa-$x;
+					printf "$WS_HOME/insects/runraxml-bestML.sh $ALGNAME $DT $ID $label $H $CPU \n" >> $DT-raxml-bestML-gene_trees.jobs;
+				done < $suffix
+			else
+				ALGNAME=$ID-mask"$y"sites.mask"$z"taxa;
+				printf "$WS_HOME/insects/runraxml-bestML.sh $ALGNAME $DT $ID $label $H $CPU \n" >> $DT-raxml-bestML-gene_trees.jobs;
+			fi
 		done < $taxa
 	done < $site
  done 

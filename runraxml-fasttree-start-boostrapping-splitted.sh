@@ -5,19 +5,16 @@ set -x
 module load python
 
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-H=$WORK/1kp/capstone/secondset
 
-test $# == 9 || exit 1
+test $# == 7 || { echo "USAGE: <ALGNAME> <DT> <ID> <label> <path> <BS#> <CPUS>" && exit 1; }
 
 ALGNAME=$1
 DT=$2
 ID=$3
 label=$4
-rep=$5
-rapid=$6 # use rapid for rapid bootstrapping or anything else for default
-H=${7}
-st=$8
-bs=$9
+H=${5}
+bs=$6
+CPUS=${7}
 
 OMP_NUM_THREADS=1
 tmpdir=$H/$ID/$DT-$ALGNAME-raxml
@@ -83,8 +80,12 @@ donebs=`grep "Overall Time" RAxML_info.ml`
 tar xfj bootstrap-reps.tbz $in.phylip.BS$bs
 fasttree $ftmodel $in.phylip.BS$bs > fasttree.tre.BS$bs 2> ft.log.BS$bs;
 test $? == 0 || { cat ft.log.BS$bs; exit 1; }
-python $DIR/arb_resolve_polytomies.py fasttree.tre.BS$bs
-raxmlHPC -F -t fasttree.tre.BS$bs.resolved -m $model -n ml.BS$bs -s $in.phylip.BS$bs -N 1  $s &> $tmpdir/logs/ml_std.errout."$bs"."$in"
+python $WS_HOME/insects/arb_resolve_polytomies.py fasttree.tre.BS$bs
+if [ "$CPUS" -ne 1 ]; then
+	raxmlHPC-PTHREADS -T $CPUS -F -t fasttree.tre.BS$bs.resolved -m $model -n ml.BS$bs -s $in.phylip.BS$bs -N 1  $s &> $tmpdir/logs/ml_std.errout."$bs"."$in"
+else
+	raxmlHPC -F -t fasttree.tre.BS$bs.resolved -m $model -n ml.BS$bs -s $in.phylip.BS$bs -N 1  $s &> $tmpdir/logs/ml_std.errout."$bs"."$in"
+fi
 test $? == 0 || { echo in running RAxML on bootstrap trees; exit 1; }
 rm $in.phylip.BS$bs*
 tar rvf bootstrap-files.tar --remove-files *BS$bs *BS$bs* 

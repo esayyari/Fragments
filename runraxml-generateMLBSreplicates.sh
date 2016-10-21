@@ -56,6 +56,6 @@ mkdir $dirn
 cd $dirn
 
 crep=$rep
-$DIR/raxmlHPC -f j -s ../$in.phylip -n BS -m $model $boot -N $crep	
+raxmlHPC -f j -s ../$in.phylip -n BS -m $model $boot -N $crep	
 mv ../$in.phylip.BS* .
 tar cfj bootstrap-reps.tbz --remove-files $in.phylip.BS*

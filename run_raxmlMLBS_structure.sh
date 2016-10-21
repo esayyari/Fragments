@@ -1,38 +1,52 @@
 #!/bin/bash
-
-site=$1
-taxa=$2
-work_dir=$3
-DT=$4
-path=$5
-suffix=$6
-
-
-
-ALGNAME=$1
+path=$1
 DT=$2
-ID=$3
-label=$4
-rep=$5
-H=${6}
-
-
-
-
-version=$(basename $(find $WS_HOME/ASTRAL -name "astral.*jar"))
-test $# -eq 6 || { echo "USAGE: <site> <taxa> <workdir> <DT> <path> <suffix>" && exit 1;}
-mkdir -p $work_dir
-if [ -s $DT-runASTRAL.jobs ]; then
-	rm $DT-runASTRAL.jobs
+label=$3
+site=$4
+taxa=$5
+suffix=$6
+CPU=$7
+rep=$8
+test $# -eq  8 || { echo "USAGE: $0 <path> <DT> <label> <site> <taxa> <suffix> <CPUS> <#replicates>" && exit 1; }
+if [ -s $DT-raxml-MLBS-gene_trees.jobs ]; then
+	rm $DT-raxml-MLBS-gene_trees.jobs
 fi
-while read y; do
-	while read x; do
-		while read h; do
-			mkdir -p $work_dir/$DT-mask"$y"sites.mask"$x"taxa$h
-			cat $path/*/$DT*mask"$y"sites.mask"$x"taxa$h/$DT*mask"$y"sites.mask"$x"taxa$h/fasttree.tre.best.addPoly.rooted.final > $work_dir/$DT-mask"$y"sites.mask"$x"taxa$h/$DT-mask"$y"sites.mask"$x"taxa$h.gene_trees.trees
-			sed -i 's/e_\([0-9]\)/e-\1/g' $work_dir/$DT-mask"$y"sites.mask"$x"taxa$h/$DT-mask"$y"sites.mask"$x"taxa$h.gene_trees.trees
-			z=$work_dir/$DT-mask"$y"sites.mask"$x"taxa$h/$DT-mask"$y"sites.mask"$x"taxa$h.gene_trees.trees
-			printf "java -jar $WS_HOME/ASTRAL/$version -i $z -o $work_dir/$DT-mask"$y"sites.mask"$x"taxa$h/$DT-mask"$y"sites.mask"$x"taxa$h.species_tree.trees > $work_dir/$DT-mask"$y"sites.mask"$x"taxa$h/$DT-mask"$y"sitesx.mask"$x"taxa$h.species_tree.trees.log 2>&1 \n" >> $DT-runASTRAL.jobs
-		done < $suffix
-	done < $taxa
-done < $site
+if [ -s DT-raxml-MLBS-gene_trees_generate.jobs ]; then
+	rm DT-raxml-MLBS-gene_trees_generate.jobs
+fi
+if [ -s $suffix ]; then
+	for id in `find $path -maxdepth 1 -mindepth 1 -type d -name "*" | sort`; do  
+		while read y; do
+			while read z; do
+				while read x; do
+					ID=$(basename $id); 
+					H=$path; 
+					ALGNAME=$ID-mask"$y"sites.mask"$z"taxa-$x;
+					crep=$(( $rep -1 ))
+						
+				
+					printf "$WS_HOME/insects/runraxml-generateMLBSreplicates.sh $ALGNAME $DT $ID $label $rep $path \n" >> $DT-raxml-MLBS-gene_trees_generate.jobs 
+					for bs in `seq  0 $crep `; do
+						printf "$WS_HOME/insects/runraxml-fasttree-start-boostrapping-splitted.sh $ALGNAME $DT $ID $label $H $bs $CPU \n" >> $DT-raxml-MLBS-gene_trees.jobs;
+					done
+				done < $suffix
+			done < $taxa
+		done < $site
+	 done 
+else
+	for id in `find $path -maxdepth 1 -mindepth 1 -type d -name "*" | sort`; do
+		while read y; do
+			while read z; do
+				ID=$(basename $id);
+				H=$path;
+				ALGNAME=$ID-mask"$y"sites.mask"$z"taxa;
+				crep=$(( $rep -1 ))
+				
+				printf "$WS_HOME/insects/runraxml-generateMLBSreplicates.sh $ALGNAME $DT $ID $label $rep $path \n" >> $DT-raxml-MLBS-gene_trees_generate.jobs
+				for bs in `seq  0 $crep `; do
+					printf "$WS_HOME/insects/runraxml-fasttree-start-boostrapping-splitted.sh $ALGNAME $DT $ID $label $H $bs $CPU \n" >> $DT-raxml-MLBS-gene_trees.jobs;
+				done
+			done < $taxa
+		done < $site
+	 done
+fi
