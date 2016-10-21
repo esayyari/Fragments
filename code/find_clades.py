@@ -31,11 +31,11 @@ class Mono(object):
     
     def is_mono(self,tree, clade):
         mrca = tree.mrca(taxa=clade)
+	
         for x in mrca.leaf_nodes():
             if x.taxon not in clade:
                 return False, mrca
         return True, mrca
-
     def can_mono(self, tree, clade):
         mrca = tree.mrca(taxa=clade)
         for child in mrca.child_nodes():
@@ -93,12 +93,12 @@ class Mono(object):
 
     def read_clades(self,filename):
         for line in open(filename):
+            line = line.replace("\n","")
+            sign = "+"
             r = line.split('\t')
             if r[0] == 'Clade Name':
                 continue
-	    print r[0]
-            clade=set()
-            sign="+"
+            clade = set()
             for x in re.split("([+|-])",r[1]):
                 try:
                     if x in ["+","-"]:
@@ -114,13 +114,18 @@ class Mono(object):
                     print "In %s, %s is not defined before" %(r[0],e.args[0])
                     sys.exit(1)
             clade = list(clade)
-	    print r
-            components=r[4].strip().split("+") if r[4] != "" else []
+	    if len(r)>=5:
+	            components=r[4].strip().split("+") if r[4] != "" else []
+	    else:
+		    components=[]
             name = r[0]
-            self.letters[name] = r[3]
+	    if len(r)>=4:
+            	self.letters[name] = r[3]
+	    else:
+		self.letters[name] = ""
             self.allclades[name] = clade
             if r[2] != "None":
-                self.clades[name] = clae
+                self.clades[name] = clade
                 self.clade_comps[name] = components
 
 if __name__ == '__main__':
