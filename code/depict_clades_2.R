@@ -1,14 +1,14 @@
 ST = FALSE
-source ("~/workspace/global/src/R/depict_clades.R")
 
-
+setwd(dirname(sys.frame(1)$ofile))
 cl=read.csv("clade-defs.txt",header=T,sep="\t")
 names(cl)<-c("V1","V2","V3",names(cl)[4:length(cl)])
 clade.order=c()
 for (x in levels(cl$V3)) {
  if (x != "None") {
   clade.order=c(clade.order,paste("[",x,"]"))
-  clade.order=c(clade.order,as.vector(paste(cl[cl$V3==x,1],sapply(cl[cl$V3==x,4],function (x) if (x!="" & !is.na(x)) paste(" (",x,")",sep="") else ""),sep="")))
+  clade.order=c(clade.order,as.vector(paste(cl[cl$V3==x,1],
+        sapply(cl[cl$V3==x,4],function (x) if (x!="" & !is.na(x)) paste(" (",x,")",sep="") else ""),sep="")))
  }
 }
 
