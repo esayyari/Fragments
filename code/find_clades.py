@@ -23,10 +23,18 @@ class Mono(object):
         self.alltaxa = taxa
         self.letters = dict()
  
-    def print_result(self, treeName, keyword, support, lst):
+    def print_result(self, treeName, keyword, mrca, lst, tree):
         ln = "_".join([str(l) for l in lst]) if type(lst) == ListType else lst
         letter = self.letters[ln]
         name="%s (%s)" %(ln,letter) if letter is not None and letter!="" else ln
+	support = None
+	if mrca is not None and hasattr(mrca,'label'):
+		support = mrca.label
+		mrca.label = "%s[%s]" %(ln,mrca.label) if mrca.label is not None else ln
+	elif hasattr(mrca,'label'):
+		mrca.label = ""
+	outputTree = treeName.replace(" ", "_") + ".out"
+	tree.write(path=outputTree, schema="newick", suppress_rooting=True)	
         print "%s\t%s\t%s\t%s" % (treeName, keyword, support, name)
     
     def is_mono(self,tree, clade):
@@ -55,19 +63,19 @@ class Mono(object):
             #print m
         if m:
             if complete:
-                self.print_result(treeName, "IS_MONO", mrca.label, name)
+                self.print_result(treeName, "IS_MONO", mrca, name, tree)
             else:
-                self.print_result(treeName, "IS_MONO_INCOMPLETE", mrca.label, name)
+                self.print_result(treeName, "IS_MONO_INCOMPLETE", mrca, name, tree)
             return
         c, mrca = self.can_mono(tree, clade)
         if c:        
             if complete:
-                self.print_result(treeName, "CAN_MONO", mrca.label, name)
+                self.print_result(treeName, "CAN_MONO", mrca, name, tree)
             else:
-                self.print_result(treeName, "CAN_MONO_INCOMPLETE", mrca.label, name)
+                self.print_result(treeName, "CAN_MONO_INCOMPLETE", mrca, name, tree)
             return
 
-        self.print_result(treeName, "NOT_MONO", mrca.label, name)
+        self.print_result(treeName, "NOT_MONO", mrca, name, tree)
 
     def analyze_clade(self,name, clade, comps, tree, treeName):
         taxa = get_present_taxa(tree, clade)
@@ -75,11 +83,11 @@ class Mono(object):
         if comps:
             for comp in comps:
                 if not set(self.allclades[comp]) & taxas:
-                    self.print_result(treeName, "COMP_MISSING", None, name)
+                    self.print_result(treeName, "COMP_MISSING", None, name, tree)
                     return
         #print len(taxa), len(clade)
         if len(taxa) < 2:
-            self.print_result(treeName, "NO_CLADE", None, name)
+            self.print_result(treeName, "NO_CLADE", None, name, tree)
         else:
             self.check_mono (tree, treeName, taxa, name, len(taxa) == len(clade))
 

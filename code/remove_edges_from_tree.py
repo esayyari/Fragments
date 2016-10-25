@@ -23,13 +23,14 @@ if __name__ == '__main__':
         sys.exit(1)
 
     treeName = sys.argv[1]            
-    t = 75 if len (sys.argv) < 3 else float(sys.argv[2])
-    resultsFile="%s.%d" % (treeName,t) if len (sys.argv) < 4 or sys.argv[3]=="-" else sys.argv[3]
+    t = 75 if len(sys.argv) < 3 else float(sys.argv[2])
+    print t
+    resultsFile="%s_%s" % (treeName,t) if len (sys.argv) < 4 or sys.argv[3]=="-" else str(sys.argv[3])
     #print "outputting to", resultsFile    
     strip_internal=True if len (sys.argv) > 4 and ( sys.argv[4]=="-strip-internal" or sys.argv[4]=="-strip-both" ) else False 
     strip_bl=True if len (sys.argv) > 4 and ( sys.argv[4]=="-strip-bl" or sys.argv[4]=="-strip-both" ) else False
     
-    trees = dendropy.TreeList.get(treeName, 'newick')
+    trees = dendropy.TreeList.get(path=treeName, schema='newick')
     filt = lambda edge: False if (edge.label is None or (is_number(edge.label) and float(edge.label) >= t)) else True
     for tree in trees:
         for n in tree.internal_nodes():
