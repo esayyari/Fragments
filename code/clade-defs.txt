@@ -30,19 +30,19 @@ Thysanoptera	"Gynaikothrips ficorum+""Frankliniella cephalica""+""Thrips palmi""
 Thysanura zygentoma	"Tricholepidion gertschi+""Atelura formicaria""+""Thermobia domestica"""	None		
 Trichoptera	"Hydroptilidae sp+""Rhyacophila fasciata""+""Platycentropus radiatus""+""Cheumatopsyche sp""+""Philopotamus ludificatus"""	None		
 Zoraptera	"Zorotypus caudelli"""	None		
-internalNode1	Siphonaptera+Mecoptera	None		
-internalNode2	Mecoptera+Siphonaptera+Diptera	None		
-internalNode3	Lepidoptera+Trichoptera	None		
-internalNode4	Trichoptera+Lepidoptera+Diptera+Mecoptera+Siphonaptera	None		
-internalNode5	Coleoptera+Strepsiptera+Neuropterida	None		
-internalNode6	Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera+Strepsiptera+Neuropterida+Coleoptera	None		
-internalNode7	Strepsiptera+Neuropterida+Coleoptera+Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera+Hymenoptera	None		
-internalNode8	Thysanoptera+Hemiptera	None		
-internalNode9	Hymenoptera+Strepsiptera+Neuropterida+Coleoptera+Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera+Hemiptera+Thysanoptera+Psocodea	None		
-internalNode10	Mantophasmatodea+Grylloblattodea	None		
-internalNode11	Embiidina+Phasmida phasmatodea+Grylloblattodea+Mantophasmatodea	None		
-internalNode12	Grylloblattodea+Mantophasmatodea+Phasmida phasmatodea+Embiidina+Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera	None		
-internalNode13	Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera+Grylloblattodea+Mantophasmatodea+Phasmida phasmatodea+Embiidina+Hemiptera+Thysanoptera+Psocodea+Hymenoptera+Strepsiptera+Neuropterida+Coleoptera+Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera	None		
-internalNode14	Hemiptera+Thysanoptera+Psocodea+Hymenoptera+Strepsiptera+Neuropterida+Coleoptera+Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera+Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera+Grylloblattodea+Mantophasmatodea+Phasmida phasmatodea+Embiidina+Ephemeroptera+Odonata	None		
-internalNode15	Ephemeroptera+Odonata+Hemiptera+Thysanoptera+Psocodea+Hymenoptera+Strepsiptera+Neuropterida+Coleoptera+Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera+Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera+Grylloblattodea+Mantophasmatodea+Phasmida phasmatodea+Embiidina+Thysanura zygentoma	None		
-internalNode16	Thysanura zygentoma+Ephemeroptera+Odonata+Hemiptera+Thysanoptera+Psocodea+Hymenoptera+Strepsiptera+Neuropterida+Coleoptera+Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera+Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera+Grylloblattodea+Mantophasmatodea+Phasmida phasmatodea+Embiidina+Archaeognatha microcoryphia	None		
+A	Siphonaptera+Mecoptera	None	Siphonaptera+Mecoptera
+B	Mecoptera+Siphonaptera+Diptera	None	Mecoptera+Siphonaptera+Diptera
+C	Lepidoptera+Trichoptera	None	Lepidoptera+Trichoptera
+D	Trichoptera+Lepidoptera+Diptera+Mecoptera+Siphonaptera	None	Trichoptera+Lepidoptera+Diptera+Mecoptera+Siphonaptera		
+E	Coleoptera+Strepsiptera+Neuropterida	None	Coleoptera+Strepsiptera+Neuropterida
+F	Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera+Strepsiptera+Neuropterida+Coleoptera	None	Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera+Strepsiptera+Neuropterida+Coleoptera
+G	Strepsiptera+Neuropterida+Coleoptera+Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera+Hymenoptera	None	Strepsiptera+Neuropterida+Coleoptera+Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera+Hymenoptera
+H	Thysanoptera+Hemiptera	None	Thysanoptera+Hemiptera
+I	Hymenoptera+Strepsiptera+Neuropterida+Coleoptera+Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera+Hemiptera+Thysanoptera+Psocodea	None	Hymenoptera+Strepsiptera+Neuropterida+Coleoptera+Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera+Hemiptera+Thysanoptera+Psocodea
+J	Mantophasmatodea+Grylloblattodea	None	Mantophasmatodea+Grylloblattodea
+K	Embiidina+Phasmida phasmatodea+Grylloblattodea+Mantophasmatodea	None	Embiidina+Phasmida phasmatodea+Grylloblattodea+Mantophasmatodea
+L	Grylloblattodea+Mantophasmatodea+Phasmida phasmatodea+Embiidina+Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera	None	Grylloblattodea+Mantophasmatodea+Phasmida phasmatodea+Embiidina+Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera		
+M	Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera+Grylloblattodea+Mantophasmatodea+Phasmida phasmatodea+Embiidina+Hemiptera+Thysanoptera+Psocodea+Hymenoptera+Strepsiptera+Neuropterida+Coleoptera+Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera	None	Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera+Grylloblattodea+Mantophasmatodea+Phasmida phasmatodea+Embiidina+Hemiptera+Thysanoptera+Psocodea+Hymenoptera+Strepsiptera+Neuropterida+Coleoptera+Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera
+N	Hemiptera+Thysanoptera+Psocodea+Hymenoptera+Strepsiptera+Neuropterida+Coleoptera+Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera+Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera+Grylloblattodea+Mantophasmatodea+Phasmida phasmatodea+Embiidina+Ephemeroptera+Odonata	None	Hemiptera+Thysanoptera+Psocodea+Hymenoptera+Strepsiptera+Neuropterida+Coleoptera+Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera+Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera+Grylloblattodea+Mantophasmatodea+Phasmida phasmatodea+Embiidina+Ephemeroptera+Odonata
+O	Ephemeroptera+Odonata+Hemiptera+Thysanoptera+Psocodea+Hymenoptera+Strepsiptera+Neuropterida+Coleoptera+Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera+Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera+Grylloblattodea+Mantophasmatodea+Phasmida phasmatodea+Embiidina+Thysanura zygentoma	None	Ephemeroptera+Odonata+Hemiptera+Thysanoptera+Psocodea+Hymenoptera+Strepsiptera+Neuropterida+Coleoptera+Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera+Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera+Grylloblattodea+Mantophasmatodea+Phasmida phasmatodea+Embiidina+Thysanura zygentoma
+P	Thysanura zygentoma+Ephemeroptera+Odonata+Hemiptera+Thysanoptera+Psocodea+Hymenoptera+Strepsiptera+Neuropterida+Coleoptera+Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera+Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera+Grylloblattodea+Mantophasmatodea+Phasmida phasmatodea+Embiidina+Archaeognatha microcoryphia	None	Thysanura zygentoma+Ephemeroptera+Odonata+Hemiptera+Thysanoptera+Psocodea+Hymenoptera+Strepsiptera+Neuropterida+Coleoptera+Diptera+Mecoptera+Siphonaptera+Trichoptera+Lepidoptera+Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera+Grylloblattodea+Mantophasmatodea+Phasmida phasmatodea+Embiidina+Archaeognatha microcoryphia
