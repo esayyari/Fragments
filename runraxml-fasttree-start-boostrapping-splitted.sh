@@ -4,8 +4,7 @@ set -x
 
 module load python
 
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-
+DIR="$( cd "$(dirname $0)" && pwd )"
 test $# == 7 || { echo "USAGE: <ALGNAME> <DT> <ID> <label> <path> <BS#> <CPUS>" && exit 1; }
 
 ALGNAME=$1
@@ -81,6 +80,9 @@ tar xfj bootstrap-reps.tbz $in.phylip.BS$bs
 fasttree $ftmodel $in.phylip.BS$bs > fasttree.tre.BS$bs 2> ft.log.BS$bs;
 test $? == 0 || { cat ft.log.BS$bs; exit 1; }
 python $WS_HOME/insects/arb_resolve_polytomies.py fasttree.tre.BS$bs
+if [ -s RAxML_info.ml.BS$bs ]; then
+	rm RAxML_info.ml.BS$bs
+fi
 if [ "$CPUS" -ne 1 ]; then
 	raxmlHPC-PTHREADS -T $CPUS -F -t fasttree.tre.BS$bs.resolved -m $model -n ml.BS$bs -s $in.phylip.BS$bs -N 1  $s &> $tmpdir/logs/ml_std.errout."$bs"."$in"
 else
