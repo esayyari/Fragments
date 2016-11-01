@@ -1,6 +1,6 @@
 ST = FALSE
-
-setwd(dirname(sys.frame(1)$ofile))
+source('~/Documents/Research/global/src/R/depict_clades.R')
+# setwd(dirname(sys.frame(1)$ofile))
 cl=read.csv("clade-defs.txt",header=T,sep="\t")
 names(cl)<-c("V1","V2","V3",names(cl)[4:length(cl)])
 clade.order=c()
@@ -13,17 +13,20 @@ for (x in levels(cl$V3)) {
 }
 
 print(cl)
-if (ST) {
-	data = read.data(clade.order=clade.order, techs.order = techs)	
-	metatable(data$y,data$y.colors,data$countes,pages=c(1),raw.all=data$raw.all)
-} else {
+#if (ST) {
+#	data = read.data(clade.order=clade.order, techs.order = techs)	
+#	metatable(data$y,data$y.colors,data$countes,pages=c(1),raw.all=data$raw.all)
+#else
 	data = read.data(file.all="clades.txt", file.hs="clades.hs.txt",clade.order=clade.order)
-        rename <- list("Nucleotide, all three codons"="FNA2AA", "Nucleotide, 1st & 2nd codon"="FNA2AA.C12", "Amino acid"="FAA",
-				               "Nucleotide, all three codons (25X filtering)"="25Xfilter-FNA2AA", "Nucleotide, 1st & 2nd codon (25X filtering)"="25Xfilter-FNA2AA.C12", "Amino acid (25X filtering)"="25Xfilter-FAA")
-        levels(data$countes.melted$DS) <- rename
-	levels(data$y$DS) <- rename	
-	metabargraph(data$countes.melted,data$y,sizes=c(12.5,15))
+#         rename <- list("Nucleotide, all three codons"="FNA2AA", "Nucleotide, 1st & 2nd codon"="FNA2AA.C12", "Amino acid"="FAA",
+# 				               "Nucleotide, all three codons (25X filtering)"="25Xfilter-FNA2AA", "Nucleotide, 1st & 2nd codon (25X filtering)"="25Xfilter-FNA2AA.C12", "Amino acid (25X filtering)"="25Xfilter-FAA")
+  # levels(data$countes.melted$DS) <- rename
+	# levels(data$y$DS) <- rename	
+	# metabargraph(data$countes.melted,data$y,sizes=c(12.5,15))
 	#metabargraph2(data$countes.melted,data$y,sizes=c(12.5,15))
-	metahistograms2(data$raw.all)
-}
-
+	# metahistograms2(data$raw.all)
+	metabargraph1(data$countes.melted,data$y,sizes=c(5,15))
+# 	p<-ggplot(data$countes.melted, aes(x = DS, y = value)) 
+# 	p <- p+ geom_bar(stat="identity") + 
+# 	  aes(fill = Classification)+facet_wrap(~CLADE)
+# 	  	theme(axis.text.x = element_text(angle = 45)) # to make the axis legend vertical
