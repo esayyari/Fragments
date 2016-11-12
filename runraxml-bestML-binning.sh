@@ -75,15 +75,15 @@ if [ "$donebs" == "" ]; then
 fi
  
 #Figure out if bootstrapping has already finished
-sed -i "s/'//g" RAxML_bestTree.best
-sed -i "s/'//g" RAxML_bootstrap.all
+sed -i "s/'//g" RAxML_bestTree.best.partitioned
+sed -i "s/e_\([0-9]\)/e-\1/g" RAxML_bestTree.best.partitioned
 sed -i "/^$/d" ../listRemoved.txt
 if [ -s "../listRemoved.txt" ]; then
-	$DIR/addIdenticalTaxa.py RAxML_bestTree.best RAxML_bestTree.best.addPoly ../listRemoved.txt
+	$DIR/addIdenticalTaxa.py RAxML_bestTree.best.partitioned RAxML_bestTree.best.addPoly ../listRemoved.txt
 	sed -i 's/-/_/g' RAxML_bestTree.best.addPoly
 else
-	cp RAxML_bestTree.best RAxML_bestTree.best.addPoly
+	cp RAxML_bestTree.best.partitioned RAxML_bestTree.best.addPoly
 fi	
-tar cvfj logs.tar.bz --remove-files RAxML_log.* RAxML_parsimonyTree.best.RUN.* RAxML_bootstrap.ml RAxML_result.best.RUN.*RAxML_bootstrap.ml*
+tar cvfj bestML-files.tar.bz --remove-files RAxML_log.* RAxML_result.best.partitioned.RUN*   RAxML_parsimonyTree.best.partitioned.RUN.*
 cd ..
 echo "Done">.done.$dirn
