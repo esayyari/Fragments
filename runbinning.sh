@@ -1,128 +1,139 @@
 #!/bin/bash
 
-set -x
 
-module load python
+DIR=$(cd "$(dirname $0)" && pwd)
 
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-H=$WORK/1kp/capstone/secondset
+outpath=${1}
+taxa=${2}
+site=${3}
+suffix=${4}
+thr=${5}
+DT=${6}
+H=${7}
+ALIGN=${8}
 
-test $# == 5 || exit 1
+test $# -eq 8 || { echo "USAGE: $0 <outpath> <taxa> <site> <suffix> <thr> <DT> <gene_path> <genetree_name>" && exit 1; }
+taxadir=$(cd $(dirname $taxa); pwd)
 
-DT=$1
-label=$2
-H=${3}
-
-for ID in `find $H -maxdepth 0 -type d -name "*"`; do
-	tmpdir=$H/$ID/$DT-$ID
-done
-
-tmpdir=$H/$ID/$DT-$ALGNAME-raxml
-mkdir -p $tmpdir
-S=raxml
-in=$DT-$ALGNAME
-boot="-b $RANDOM"
-s="-p $RANDOM"
-dirn=raxmlboot.$in.$label
-
-cp $H/$ID/$in.fasta $tmpdir/$in.fasta
-
-cd $tmpdir
-pwd
-mkdir logs
+#run step 4 of binning in this way: 
+#	cd $outpath"/binning/binning_mask"$s"site.mask"$t"taxa-"$j"-raxml-binthr"$x"
+#	$BINNING_HOME/build.supergene.alignments.sh `pwd`/pairwise_output_dir/  genes `pwd`/supergenes_dir > working_dir/supergene.out 2>&
 
 
-test "`head -n 1 $in.phylip`" == "0 0" && exit 1
-
-if [ "$DT" == "FAA" ]; then
-	if [ -s bestModel.$ALGNAME ]; then
-		model=PROTGAMMA`sed -e "s/.* //g" bestModel.$ALGNAME`
-	else
-		echo model selection failed. check the log file
-		exit 1
-	fi
-	submodel=$(sed -e "s/.* //g" bestModel.$ALGNAME)
-else
-	model=GTRGAMMA
-	submodel=DNA
+if [ -s tasks.massive-Insects-long-branch-filtering-binning-bestML-partitioned-concatenate_genes ]; then
+	rm tasks.massive-Insects-long-branch-filtering-binning-bestML-partitioned-concatenate_genes
 fi
+if [ -s tasks.massive-Insects-long-branch-filtering-binning-bestML-partitioned-new ]; then
+	rm tasks.massive-Insects-long-branch-filtering-binning-bestML-partitioned-new
+fi
+while read x; do
+        while read t; do
+                while read s; do
+                        if [ -s "$suffix" ]; then
+                                while read j; do
+                                        wrk="$outpath"/binning/binning_mask"$s"site.mask"$t"taxa-"$j"-raxml-binthr"$x"
+                                        for dir in `find "$wrk"/supergenes_dir -maxdepth 1 -mindepth 1 -type d -name "bin*"`; do
+						g=$(cat $dir/supergene.part | wc -l);
+						for i in `seq 1 $g`; do
+							printf "cat $z/supergene-raxml/raxmlboot.supergene.partitioned/RAxML_bestTree.best.partitioned >> filtered-$s-sites-$t-taxa-$j-raxml-binning-$x-partitioned.gene_trees.trees \n" >> tasks.massive-Insects-long-branch-filtering-binning-bestML-partitioned-concatenate_genes;
+						done
+
+					        if [ $g -gt 1 ]; then
+							if [ -s $dir/supergene.part.partitioned ]; then	
+								rm $dir/supergene.part.partitioned
+							fi
+						        while read z; do
+					        	        l=$(dirname $(echo $z | awk '{print $2}'));
+					                	newmodel=$(cat $wrk/$l/bestModel* | sed -e "s/.* //g");
+									echo $l
+								echo $newmodel
+							
+						                p=$(echo $z | awk '{print $2}');
+						                y=$(basename $p);
+						                h=$(echo $z | awk '{print $3,$4}');
+						                printf "$newmodel, $y $h\n" >> $dir/supergene.part.partitioned;
+						        done < $dir/supergene.part; 
+						fi;
+						
+                                        done
+					for z in `find $wrk/supergenes_dir/ -maxdepth 1 -type d -name "bin*" | sort`; do 
+						line=$(cat $z/supergene.part | wc -l); 
+						if [ "$line" -gt "1" ]; then 
+							h=$wrk; 
+							b=$(basename $z); 
+							p=$(dirname $h);  
+							printf "$WS_HOME/insects/runraxml-bestML-binning.sh supergene $DT $b partitioned $wrk/supergenes_dir 4\n";
+						 fi 
+					done >> tasks.massive-Insects-long-branch-filtering-binning-bestML-partitioned-new
+
+					for z in `find  $wrk/supergenes_dir/ -maxdepth 2 -name supergene.part | sort`; do 
+						g=$(cat $z | wc -l); 
+						if [ "$g" -eq "1" ]; then 
+							h=$(dirname $z); 
+							mkdir -p $h/supergene-raxml/raxmlboot.supergene.partitioned; 
+							y=$(cat $z);
+							if [ -s $h/supergene-raxml/raxmlboot.supergene.partitioned/RAxML_bestTree.best.partitioned ]; then 
+								rm $h/supergene-raxml/raxmlboot.supergene.partitioned/RAxML_bestTree.best.partitioned; 
+							fi
+							cp $H/$y/$DT-$y-mask"$s"sites.mask"$t"taxa-"$j"-raxml/raxmlb*/$ALIGN $h/supergene-raxml/raxmlboot.supergene.partitioned/RAxML_bestTree.best.partitioned; 
+						fi
+					done
+
+					for z in `find . -maxdepth 1 -type d -name "bin*" | sort `; do 
+						g=$(cat $z/supergene.part | wc -l); 
+						for i in `seq 1 $g`; do 
+							printf "cat $z/supergene-raxml/raxmlboot.supergene.partitioned/RAxML_bestTree.best.partitioned >> filtered-$ssites-$ttaxa-$j-raxml-binning-$x-partitioned.gene_trees.trees \n" >> tasks.massive-Insects-long-branch-filtering-binning-bestML-partitioned-concatenate_genes; 
+						done
+					done
+                                        cd $taxadir
+                                done < $suffix
+                        else
+                                wrk=$outpath/binning/binning_mask"$s"site.mask"$t"taxa-raxml-binthr"$x"
+                                for dir in `find $wrk/supergenes_dir -maxdepth 1 -mindepth 1 -type d -name "bin*"`; do
+					g=$(cat $dir/supergene.part | wc -l);
+					for i in `seq 1 $g`; do
+						printf "cat $z/supergene-raxml/raxmlboot.supergene.partitioned/RAxML_bestTree.best.partitioned >> filtered-$s-sites-$t-taxa-raxml-binning-$x-partitioned.gene_trees.trees \n" >> tasks.massive-Insects-long-branch-filtering-binning-bestML-partitioned-concatenate_genes;
+					done
+					if [ $g -gt 1 ]; then
+						while read z; do
+							l=$(dirname $(echo $z | awk '{print $2}'));
+							newmodel=$(cat ../$l/bestModel* | sed -e "s/.* //g");
+							p=$(echo $z | awk '{print $2}');
+							y=$(basename $p);
+							h=$(echo $z | awk '{print $3,$4}');
+							printf "$newmodel, $y $h\n" >> $dir/supergene.part.partitioned;
+						done < $dir/supergene.part;
+					fi;
+
+				done
+				for z in `find $wrk/supergenes_dir/ -maxdepth 1 -type d -name "bin*" | sort`; do
+					line=$(cat $z/supergene.part | wc -l);
+					if [ "$line" -gt "1" ]; then
+						h=$wrk;
+						b=$(basename $z);
+						p=$(dirname $h);
+						printf "$WS_HOME/insects/runraxml-bestML-binning.sh supergene $DT $b partitioned $p/supergenes_dir 4\n";
+					 fi
+				done >> tasks.massive-Insects-long-branch-filtering-binning-bestML-partitioned-new
+
+				for z in `find  $wrk/supergenes_dir/ -maxdepth 2 -name supergene.part | sort`; do
+					g=$(cat $z | wc -l);
+					if [ "$g" -eq "1" ]; then
+						h=$(dirname $z);
+						mkdir -p $h/supergene-raxml/raxmlboot.supergene.partitioned;
+						y=$(cat $z);
+						rm $h/supergene-raxml/raxmlboot.supergene.partitioned/RAxML_bestTree.best.partitioned;
+						cp $H/$y/$DT-$y-mask"$s"site.mask"$t"taxa-raxml/raxmlb*/$ALIGN $h/supergene-raxml/raxmlboot.supergene.partitioned/RAxML_bestTree.best.partitioned;
+					fi
+				done
+
+                                cd $taxadir
+                                echo "working on $wrk has been finished"
+                        fi
+                done < $site
+        done < $taxa
+done < $thr
 
 
-while read i; do 
-	g=$(cat $i/supergene.part | wc -l); 
-	if [ $g -gt 1 ]; then 
-	while read x; do 
-		l=$(echo $x | awk '{print $2}' | sed -e "s/binning_50//"); 
-		newmodel=$(cat $l*/*-raxml/bestModel* | sed -e "s/.* //g"); 
-		p=$(echo $x | awk '{print $2}'); 
-		y=$(basename $p);  
-		h=$(echo $x | awk '{print $3,$4}'); 
-		printf "$newmodel, $y $h\n"; 
-	done < $i/supergene.part; fi; 
-done < running_replicates.txt
 
-for at in "${a[@]}"; do 
-	mkdir binning_$at; 
-	for x in `find */*-raxml/raxml*/RAxML_bestTree.best.addPoly.rooted.final.fasttree.rerooted`; do 
-		lf=$(absp .);
-		y=$(dirname $x); 
-		z=$(basename $x); 
-		k=$(dirname $y | sed -e 's/-raxml/.fasta/'); 
-		f=$(dirname $k); 
-		mkdir binning_$at/$f/; 
-		cp $x binning_$at/$f; 
-		cp $k binning_$at/$f/$f.fasta; 
-	done; 
-	mkdir binning_$at/pairwise_output_dir; 
-	mkdir binning_$at/running_dir; 
-	#source ~/.dendropy3/venv/bin/activate; 
-	a=$(cd binning_$at/running_dir; $BINNING_HOME/makecommands.compatibility.sh  $lf/binning_$at/  50 $lf/binning_$at/pairwise_output_dir RAxML_bestTree.best.addPoly.rooted.final.fasttree.rerooted; ); 
-	cat commands.compat."$at".*_$at* | xargs -P 5 -I@ sh -c "@"; 
-	b=$(cd binning_$at/pairwise_output_dir; ls| grep -v ge|sed -e "s/.$at$//g" > genes; python $BINNING_HOME/cluster_genetrees.py genes); 
-	echo $b; 
-	mkdir supergenes_output_directory;   
-	$BINNING_HOME/build.supergene.alignments.sh $lf/binning_$at/pairwise_output_dir $lf/binning_$at $lf/binning_$at/supergenes_output_directory; 
-done
 
-for x in `find supergenes_output_directory -maxdepth 1 -name "bin*"`; do 
-	line=$(cat $x/supergene.part  |wc -l); 
-	if [ $line -gt "1" ]; then  
-		while read  y; do 
-			p=$(echo $y | awk '{print $2}'); 
-			seq=$(echo $y | awk '{print $3,$4}'); 
-			b=$(echo $p | sed -e "s/binning_$at//g" | sed -e 's/\/\/*/\//g'); 
-			model=$(find $b*/*-raxml -name "bestModel*"); 
-			bas=$(basename $p);
-			M=$(cat $model | sed -e 's/.* //'); 
-			printf "$M, $bas $seq\n"; 
-		done < $x/supergene.part > $x/supergene.part.partitioned;  
-	fi
-done
-
-for x in `find supergenes_output_directory/ -maxdepth 1 -type d -name "bin*"`; do 
-	line=$(cat $x/supergene.part | wc -l); 
-	if [ "$line" -gt "1" ]; then 
-		h=$(absp .); 
-		b=$(basename $x); 
-		p=$(dirname $h);  
-		printf "$WS_HOME/insects/runraxml-bestML-binning.sh supergene FAA $b partitioned $p/supergenes_output_directory/ 4\n";
-	 fi 
-done >> ~/tasks/tasks.massive-Insects-long-branch-filtering-binning-bestML-partitioned-new
-
-for x in `find  . -maxdepth 2 -name supergene.part | sort`; do 
-	g=$(cat $x | wc -l); 
-	if [ "$g" -eq "1" ]; then 
-		h=$(dirname $x); 
-		mkdir -p $h/supergene-raxml/raxmlboot.supergene.partitioned; 
-		y=$(cat $x); 
-		rm $h/supergene-raxml/raxmlboot.supergene.partitioned/RAxML_bestTree.best.partitioned; 
-		cp ../../$y/*-raxml/raxmlb*/RAxML_bestTree.best.addPoly $h/supergene-raxml/raxmlboot.supergene.partitioned/RAxML_bestTree.best.partitioned; 
-	fi
-done
-
-for x in `find . -maxdepth 1 -type d -name "bin*" | sort `; do 
-	g=$(cat $x/supergene.part | wc -l); 
-	for i in `seq 1 $g`; do 
-		cat $x/sup*/raxml*/RAxML_bestTree.best.partitioned >> filtered_10sites_50taxa_with_long_branch_filtering_binning_50_partitioned.gene_trees.trees; 
-	done
-done

@@ -26,7 +26,8 @@ if [ -s $suffix ]; then
 						
 				
 					printf "$WS_HOME/insects/runraxml-generateMLBSreplicates.sh $ALGNAME $DT $ID $label $rep $path \n" >> $DT-raxml-MLBS-gene_trees_generate.jobs 
-					for bs in `seq  0 $crep `; do
+					printf "$WS_HOME/insects/draw_support_on_best_ML.sh $ALGNAME $DT $ID $label $rep $path \n" >> $DT-draw_support.jobs
+				for bs in `seq  0 $crep `; do
 						printf "$WS_HOME/insects/runraxml-fasttree-start-boostrapping-splitted.sh $ALGNAME $DT $ID $label $H $bs $CPU \n" >> $DT-raxml-MLBS-gene_trees.jobs;
 					done
 				done < $suffix
