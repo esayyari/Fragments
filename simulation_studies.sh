@@ -21,6 +21,9 @@ grep "[a-zA-Z0-9]" $(cat listOfFiles-with-main_root | sort | xargs -I@ sh -c 'ec
 echo "ID,taxa,branch_length" > all_distances.txt
 grep "[a-zA-Z0-9]" $(cat listOfFiles-with-main_root | sort | xargs -I@ sh -c 'echo @/FNA-@-rm-3rdCodon-mask1sites.mask1taxa/distances_to_the_root.txt') | sed -e 's/\/.*:/,/g' >> all_distances.txt
 sed -i 's/\t/,/g' all_distances.txt
-cd ../simulated
+cd ../simulated/model.100.2000000.0.000001/
 seq -w 1 50 | xargs -P 3 -I@ sh -c '$WS_HOME/insects/simulated-nw-friendly-root.py @/estimatedgenetre.halfresolved @/estimatedgenetre.halfresolved.rerooted-nw-friendly; $WS_HOME/insects/simulated-root.py @/estimatedgenetre.halfresolved @/estimatedgenetre.halfresolved-rooted; echo @;'
- 
+for i in `seq -w 1 50`; do
+	nw_distance $i/estimatedgenetre.halfresolved.rerooted-nw-friendly -m r -s f -n | sort -nk1 > $i/branch_lenght$i.txt
+done
+echo "ID taxa branch_length" > branch_length_all_simulated.txt; grep "[0-9]" */branch* | sed -e 's/\/.*:/ /g' | sed -e 's/\t/ /g' >> branch_length_all_simulated.txt 
