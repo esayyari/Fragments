@@ -5,15 +5,21 @@ import os
 import numpy as np
 #average_branch_lengths.csv  fragmentary_augmented.csv  simulated_average_branch_lengths.csv
 # np.random.choice(a, size=None, replace=True)
-
+#I've assumed that the actual root is at bNames[0]
+#I've assumed that the mapping of outgroups is uniqly defined, also 
+#I've assumed that the number of taxa in simulated dataset is 100 (other than outgroup)
+#I've assumed that the outgroup in the simulated datasets is the first branch length
+	
 
 
 class ReadAvgBioBranchLengths(object):
+
 	def __init__(self,filepath=""):
 		self.__filepath = filepath
 		self.__names = list()
 		self.__bLength = list()
 		self.__root = ""
+
 	def readTable(self):
 		f = open(self.__filepath, 'r')
 		j = 0
@@ -27,13 +33,22 @@ class ReadAvgBioBranchLengths(object):
 				j = j + 1
 			self.__names.append(t[0])
 			self.__bLength.append(t[1])
-		f.close()			
+		f.close()		
+
+	def print(self):
+		self.readTable(self)
+		for (i in range(0,len(self.__names))):
+			print self.__names[i],self.__bLength[i]
+
 	def root(self):
 		return self.__root
+
 	def names(self):
 		return self.__names
+
 	def brLength(self):
 		return self.__bLength
+
 class ReadTable(object):
 	
 	def __init__(self,filepath=""):
@@ -42,6 +57,7 @@ class ReadTable(object):
 		self.__revTable = dict()
 		self.__tableList = dict()
 		self.__filepath = filepath
+		self.__numRow = 0
 	
 	def __readTaxa(self):
 		f = open(self.__filepath, 'r')
@@ -51,10 +67,13 @@ class ReadTable(object):
 				t = line.split(",")
 				self.__names = t[1:]
 		f.close()
-	
+
+
 	def __readTableAsList(self):
 		f = open(self.__filepath, 'r')
+		self.__numRow = 0
 		for i, line in enumerate(f):
+			self.__numRow = self.__numRow + 1
 			line = line.replace("\n", "")
 			t = line.split(",")
 			if i >0:
@@ -72,8 +91,8 @@ class ReadTable(object):
 			if i > 0:
 				for j in range(1, len(t)):
 					tName = self.__names[j-1]
-					if t[i] is not "NA":
-						self.__revTable[tName].append(t[i])
+					if t[j] is not "NA":
+						self.__revTable[tName].append(t[j])
 		f.close()
 	
 	def __readTable(self):
@@ -88,28 +107,56 @@ class ReadTable(object):
 					tName = self.__names[j-1]
 					self.__table[ID][tName] = t[j-1]
 		f.close()
-	
+
+	def printTableAsList(self):
+		print "ID",
+		for i in range(0,len(self.__names)):
+			print self.__names[i],
+		print
+		for ID in self.__tableList:
+			print ID,
+			for i in range(0,len(self.__names)):
+				print self.__tableList[ID][i],
+			print 
+
+	def printTable(self):
+		print "ID",
+		for i in range(0,len(self.__names)):
+			print self.__names[i],
+		print
+		for ID in self.__table:
+			print ID,
+			for i in range(0,len(self.__names)):
+				print self.__table[ID][self.__names[i]],
+			print
+
 	def names(self):
 		self.__readTaxa(self)
-		return self.__names	
+		return self.__names
+	
 	def table(self):
 		self.__readTaxa(self)
 		self.__readTable(self)
 		return self.__table
+
 	def revTable(self):
 		self.__readTaxa(self)
 		self.__readRevTable(self)
 		return self.__revTable
+
 	def root(self):
 		self.readTaxa(self)
 		return self.__secondColName
+
 	def tableAsList(self):
 		self.__readTaxa(self)
 		self.__readTableAsList(self)
 		return self.__tableList
 
+
 class ParameterEstimation(object):
 	def __init__(self, avgBrLenFile="", fragDataFile="", simBrLengthFile="", seed=32699, numG=1000):
+
 		self.__avgBrLen = ReadAvgBioBranchLengths(avgBrLenFile)
 		self.__fragData = ReadTable(fragDataFile)
 		self.__simBrLen = ReadTable(simBrLengthFile)
@@ -197,10 +244,6 @@ simBrLength = ReadTable('simulated_average_branch_lengths.csv')
 
 
 
-#I've assumed that the actual root is at bNames[0]
-#I've assumed that the mapping of outgroups is uniqly defined, also 
-#I've assumed that the number of taxa in simulated dataset is 100 (other than outgroup)
-#I've assumed that the outgroup in the simulated datasets is the first branch length
-		
+	
 		
 		 
