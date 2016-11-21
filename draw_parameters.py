@@ -234,8 +234,9 @@ class ParameterEstimation(object):
 		self.__table[i] = list()
 		for g in range(0, self.__numG):
 			# Choose which Biological Gene data should map to this gene in simulated
-			selectedGID = np.random.choice(range(0, len(self.__fragTable.keys())), 1, replace=True)
+			selectedGID = np.random.choice(range(0, len(self.__fragTable.keys())), 1, replace=True)[0]
 			selectedG = self.__fragTable.keys()[selectedGID]
+			
 			#selectedFragData is a dictionary itself, which stores the fragmentary ration for each taxa in gene selectedG
 			selectedFragData = self.__fragTable[selectedG]
 			fragInfo = list()

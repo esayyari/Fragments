@@ -6,7 +6,7 @@ import pandas as pd
 filename = 'fragmentary_augmented.csv'
 table = pd.read_csv(filename)
 
-filename = 'a'
+filename = 'parameters.csv'
 #REP GENE BTAXA BLEN STAXA SLEN GENEID FRAG
 sample = pd.read_csv(filename)
 print sample.columns
