@@ -1,4 +1,5 @@
 #!/bin/bash
+
 if [ ! -s "clade-defs.txt-backup" ]; then
 	cp clade-defs.txt clade-defs.txt-backup
 fi

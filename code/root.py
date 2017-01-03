@@ -16,8 +16,9 @@ hdir=os.path.dirname(os.path.realpath(__file__))
 ROOTS = [
         ["IXODES_SCAPULARIS"],
         ["Symphylella_vulgaris","Glomeris_pustulata"],
-        ["Lepeophtheirus_salmonis","DAPHNIA_PULEX"],["Cypridininae_sp","Sarsinebalia_urgorii","Celuca_puligator","Litopenaeus_vannamei"]]
-        #["Anopheles_gambiae","Aedes_aegypti","Phlebotomus_papatasi","Tipula_maxima","Trichocera_fuscata","Bibio_marci","Bombylius_major","Drosophila_melanogaster","Lipara_lucens","Rhagoletis_pomonella","Glossina_morsitans","Sarcophaga_crassipalpis","Triarthria_setipennis"]]
+        ["Lepeophtheirus_salmonis","DAPHNIA_PULEX"],["Cypridininae_sp","Sarsinebalia_urgorii","Celuca_puligator","Litopenaeus_vannamei"]
+        ]
+
 def root (rootgroup, tree):
     root = None
     bigest = 0
@@ -36,14 +37,13 @@ def root (rootgroup, tree):
         return None
     #print "new root is: ", root.as_newick_string()
     newlen = root.edge.length/2 if root.edge.length else None
-    tree.reroot_at_edge(root.edge,length1=newlen,length2=newlen,suppress_unifurcations=False)
+    tree.reroot_at_edge(root.edge,length1=newlen,length2=newlen)
     '''This is to fix internal node labels when treated as support values'''
     while oldroot.parent_node != tree.seed_node and oldroot.parent_node != None:
         oldroot.label = oldroot.parent_node.label
         oldroot = oldroot.parent_node
         if len(oldroot.sister_nodes()) > 0:
             oldroot.label = oldroot.sister_nodes()[0].label
-    tree.suppress_unifurcations()
     return root
 
 if __name__ == '__main__':
@@ -58,8 +58,10 @@ if __name__ == '__main__':
         resultsFile="%s.%s" % (treeName, "rerooted")
     
     c={}
+    #for x in open(os.path.join(hdir,"annotate.txt")):
+     #   c[x.split('\t')[0]] = x.split('\t')[2][0:-1]
 
-    trees = dendropy.TreeList.get_from_path(treeName,'newick',rooting="force-rooted",preserve_underscores=True)
+    trees = dendropy.TreeList.get_from_path(treeName, 'newick',rooting="force-rooted", preserve_underscores=True)
     for i,tree in enumerate(trees):
 	roots = ROOTS
         while roots and root(roots[0],tree) is None:

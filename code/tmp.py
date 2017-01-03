@@ -1,19 +1,20 @@
 #!/usr/bin/env python
-import sys
 
-def readRoots(rootFile):
-        f = open(filename,'r')
-        ROOT = list()
-        for line in f:
-                line = line.replace("\n","")
-                tmpRoot =  line.split(" ")
-                ROOT.append(tmpRoot)
-        return ROOT
-if __name__ == "__main__":
-		 
-	filename = sys.argv[1]
-	ROOT = readRoots(filename)
-	for line in ROOT:
-		for l in line:
-			print l,
-		print
+
+from string import ascii_lowercase
+import itertools
+
+def iter_all_strings():
+	size = 1
+	while True:
+		for s in itertools.product(ascii_lowercase, repeat = size):
+			yield "".join(s)
+		size += 1
+		print size
+
+gen = iter_all_strings()
+def label_gen():
+	for s in gen:
+		return s
+for i in range(0,100):
+	print label_gen()
