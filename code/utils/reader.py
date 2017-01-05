@@ -13,13 +13,13 @@ class Opt(object):
 		self.style = style
 		self.annotation = annotation
 
-		(search, searchthr, searchrooted, searchthrrooted) = searchFiles(self, mode, path, thresh)
+		(search, searchthr, searchrooted, searchthrrooted) = searchFiles(mode, path, thresh)
 		self.search = search
 		self.searchthr = searchthr
 		self.searchrooted = searchrooted
 		self.searchthrrooted = searchthrrooted
 
-	def parseArgs(parser):
+	def parseArgs(self, parser):
 
 		(options, args) = parser.parse_args()
 		if not options.path:

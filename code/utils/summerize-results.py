@@ -14,11 +14,6 @@ from analyze import Analyze
 
 			
 		
-#def occupancyAnalysis():
-	
-#def bootstrapAndBLAnalysis():
-
-#def geneVsSpeciesAnalysis():
 
 if "__main__" == __name__:
 

@@ -55,7 +55,7 @@ input = "/Users/Erfan/Documents/Research/insects/code/test/species/"
 out = input
 setwd(out)
 print(getwd())
-depict = paste(WS_HOME,"/insects/code/main_depict_clades.R",sep="") 
+depict = paste(WS_HOME,"/insects/code/R/main_depict_clades.R",sep="") 
 source(depict)
 
 cl=read.csv(clade,header=T,sep="\t")

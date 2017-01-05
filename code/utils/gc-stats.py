@@ -4,7 +4,6 @@ import os
 import sys
 import re
 import subprocess as sub
-import simplifyfasta
 	
 def simplifyfasta(filename):
         tmpfile = filename + ".tmp"

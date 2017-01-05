@@ -10,7 +10,7 @@ def is_number(s):
         return True
     except ValueError:
         return False
-def main(*arg):
+def remove_edges_from_tree(*arg):
 
     treeName = arg[0]
     t = 75 if len(arg) < 2 else float(arg[1])
@@ -113,3 +113,6 @@ def reroot(*arg):
             print "Tree %d: none of the root groups %s exist. Leaving unrooted." %(i," or ".join((" and ".join(a) for a in ROOTS)))
     print "writing results to " + resultsFile
     trees.write(path=resultsFile,schema='newick',suppress_rooting=True,suppress_leaf_node_labels=False, unquoted_underscores=True)
+
+
+
