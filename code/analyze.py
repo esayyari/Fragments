@@ -2,7 +2,8 @@ import os
 import glob
 import re
 import tools
-import subprocess 
+import subprocess
+import find_clades 
 def gcStatAnalysis(opt):
 
 	outFile = opt.path + "/gc-stat.csv"
@@ -38,8 +39,8 @@ def treesAnalyses(opt):
 	searchFiles = " ".join(glob.glob(opt.searchrooted))
 	searchFilesthr = " ".join(glob.glob(opt.searchthrrooted))
 
-	tools.find_clades(opt.names, opt.clades, outFile, searchFiles) 
-	tools.find_clades(opt.names, opt.clades, outFilethr, searchFilesthr)
+	find_clades.main(opt.names, opt.clades, outFile, searchFiles) 
+	find_clades.main(opt.names, opt.clades, outFilethr, searchFilesthr)
 
 	f = open(outFile,'r')
 	outRes = outFile + ".res"

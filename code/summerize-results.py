@@ -12,13 +12,6 @@ import subprocess
 from reader import Opt
 from analyze import Analyze
 
-def concatenateFiles(outFile, search):
-	searchFiles = " ".join(glob.glob(search))
-	with open(outFile, 'a') as outfile:
-		for fname in searchFiles.split(" "):
-			with open(fname) as infile:
-				for line in infile:
-					outfile.write(line)
 			
 		
 #def occupancyAnalysis():

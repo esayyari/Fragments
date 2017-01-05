@@ -85,7 +85,7 @@ if "__main__" == __name__:
 	src_fpath = os.path.expanduser(os.path.expandvars(sys.argv[1]))
 	if not os.path.exists(src_fpath):
 	    sys.stderr.write('Not found: "%s"' % src_fpath)
-	simpl = simplifyfasta.main(src_fpath)
+	simpl = simplifyfasta(src_fpath)
 	
 	dest_fpath=None
 	
