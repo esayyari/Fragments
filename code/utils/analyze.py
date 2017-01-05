@@ -112,3 +112,6 @@ class Analyze(object):
 		err.write(stdout)
 		err.write(stderr)
 		err.close()
+	def analyze(self):
+		if self.opt.mode == 0 or self.opt.mode == 1:
+			self.treesAnalyses()

@@ -48,5 +48,5 @@ if "__main__" == __name__:
 	opt = Opt(parser)
 	
 	analyzer = Analyze(opt)
-	analyzer.treesAnalyses()
+	analyzer.analyze()
 	
