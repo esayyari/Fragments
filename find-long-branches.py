@@ -40,8 +40,24 @@ def pstdev(data):
     ss = _ss(data)
     pvar = ss/n # the population variance
     return pvar**0.5
-
-
+def branchInfo(treeName, outFile, opt):
+	c={}
+	for x in open(opt.annotate):
+	        c[x.split('\t')[0]] = x.split('\t')[2][0:-1]
+	trees = dendropy.TreeList.get_from_path(treeName, 'newick',rooting="force-rooted", preserve_underscores=True)
+	r = os.path.basename(treeName).split("-")
+	mode = ("-".join(r[2:])).replace(".trees","")
+	DS = r[0] 
+	f = open(outFile,'w')
+	for i,tree in enumerate(trees):
+	        disrt = [n.distance_from_root() for n in tree.leaf_node_iter()]
+        	med = median(disrt)
+	        avg = mean(disrt)
+        	std = pstdev(disrt)
+		
+	        string = DS " " + mode + " " + str(i+1) + " " + str(med) + " " + str(avg) + " " + str(std) + "\n"
+		f.write(string)
+	f.close()
 if __name__ == '__main__':
 
     if len(sys.argv) < 2: 

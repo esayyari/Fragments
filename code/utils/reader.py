@@ -81,9 +81,9 @@ class Opt(object):
 			sys.exit("Please enter the mode. Do you want to summerize the species tree (0), or the gene trees (1)")
 
 		mode = int(options.mode)
-		if mode != 0 and mode != 1 and mode !=2:
+		if mode != 0 and mode != 1 and mode !=2 and mode != 3 and mode != 4:
 			parser.print_help()
-			sys.exit("To summerize species tree use 0, and to ummerize gene trees use 1. To do GC-stat analysis use 2")
+			sys.exit("To summerize species tree use 0, and to ummerize gene trees use 1. To do GC-stat analysis use 2. To do occupancy analysis use 3. To do branchInfo analysis.")
 
 		if not options.annotation:
 			parser.print_help()
@@ -111,9 +111,19 @@ class Opt(object):
 			searchrooted = path + '/*/*/' + 'estimated_gene_trees.tree' + '.rerooted'
 			searchthrrooted = path + '/*/*/' + 'estimated_gene_trees.tree.' + str(thresh) + '.rerooted'
 		elif mode == 2:
-			search = path + '/*/orig_alignments.fasta'
+			search = path + '/*/*-alignment-noFilter.fasta'
 			searchthr = None
 			searchrooted = None
+			searchthrrooted = None
+		elif mode == 3:
+			search = path + '/*/*-alignment-*.fasta'
+			searchthr = None
+			searchrooted = None
+                        searchthrrooted = None
+		elif mode == 4:
+			search = path + '/*/*-estimated_gene_trees.tree'
+			searchthr = None
+			searchrooted = path + '/*/*-estimated_gene_trees.tree.rerooted'
 			searchthrrooted = None
 		return (search, searchthr, searchrooted, searchthrrooted)
 			

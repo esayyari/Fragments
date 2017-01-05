@@ -3,7 +3,7 @@ import os
 import dendropy
 import sys
 import os.path
-
+import re
 def is_number(s):
     try:
         float(s)
@@ -113,6 +113,103 @@ def reroot(*arg):
             print "Tree %d: none of the root groups %s exist. Leaving unrooted." %(i," or ".join((" and ".join(a) for a in ROOTS)))
     print "writing results to " + resultsFile
     trees.write(path=resultsFile,schema='newick',suppress_rooting=True,suppress_leaf_node_labels=False, unquoted_underscores=True)
+def branchSupports(treeNames, outFile):
+	f = open(outFile, 'w')
+	for treeName in treeNames:
+		r = os.path.basename(treeName).split("-")
+                mode = os.path.basename(os.path.dirname(treeName))
+                DS = r[0]
+		trees = dendropy.TreeList.get_from_path(treeName,'newick',rooting="force-rooted", preserve_underscores=True)
+		for tree in trees:
+			for n in tree.postorder_node_iter():
+			        if n.is_leaf():
+					continue
+        			else:            
+        				string = DS + " " + mode + " " + n.label + "\n"
+					f.write(string)
+	f.close()
+
+	
+def simplifyfasta(filename):
+        tmpfile = filename + ".tmp"
+        g = open(tmpfile, 'w')
+        f = open(filename, 'r')
+        for line in f:
+                line = line.rstrip('\n')
+                r = re.sub('>(.*)', '@>\\1@', line)
+                g.write(r)
+        g.close()
+        g = open(tmpfile, 'r')
+        for line in g:
+                line = re.sub('@','\n',line)
+                line = re.sub('^\n','',line)
+                return line
+def occupancy(search, outFile): 
+        searchFiles = glob.glob(search)
+	g = open(outFile, 'w')
+        for fname in searchFiles:
+                fname = os.path.abspath(fname)
+                base = os.path.basename(fname)
+                ID = os.path.basename(os.path.dirname(fname))
+                splitBase = base.split("-")
+                DS = splitBase[0]
+                mode = ("-".join(splitBase[2:])).replace(".fasta","")
+
+                output = simplifyfasta(fname)
+                for line in output.split("\n"):
+                        if re.match(">", line) is not  None:
+                                taxon = re.sub(">","",line)
+                                continue
+                        else:
+                                newLine = re.sub("[N-]","",line)
+                                string = DS + " " + ID + " " + mode + " " + taxon + " " + str(len(newLine))+"\n"
+                                g.write(string)
+hdir=os.path.dirname(os.path.realpath(__file__))
+
+def mean(data):
+    """Return the sample arithmetic mean of data."""
+    n = len(data)
+    if n < 1:
+        raise ValueError('mean requires at least one data point')
+    return sum(data)/n # in Python 2 use sum(data)/float(n)
+
+def median(data):
+    """Return the sample arithmetic mean of data."""
+    n = len(data)
+    if n < 1:
+        raise ValueError('median requires at least one data point')
+    return data[n/2] # in Python 2 use sum(data)/float(n)
+
+def _ss(data):
+    """Return sum of square deviations of sequence data."""
+    c = mean(data)
+    ss = sum((x-c)**2 for x in data)
+    return ss
+
+def pstdev(data):
+    """Calculates the population standard deviation."""
+    n = len(data)
+    if n < 2:
+        raise ValueError('variance requires at least two data points')
+    ss = _ss(data)
+    pvar = ss/n # the population variance
+    return pvar**0.5
+def branchInfo(treeName, outFile):
+        c={}
+        f = open(outFile, 'w')
 
 
+       	for gene in treeName:
+		r = os.path.basename(gene).split("-")
+		mode = os.path.basename(os.path.dirname(gene))
+        	DS = r[0]
+	        trees = dendropy.TreeList.get_from_path(gene, 'newick',rooting="force-rooted", preserve_underscores=True)
+        	for i,tree in enumerate(trees):
+                	disrt = [n.distance_from_root() for n in tree.leaf_node_iter()]
+	                med = median(disrt)
+        	        avg = mean(disrt)
+                	std = pstdev(disrt)
 
+	                string = DS + " " + mode + " " + str(i+1) + " " + str(med) + " " + str(avg) + " " + str(std) + "\n"
+			f.write(string)
+        f.close()

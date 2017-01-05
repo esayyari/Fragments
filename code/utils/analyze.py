@@ -4,6 +4,8 @@ import re
 import tools
 import subprocess
 import find_clades
+import gc_stats
+import tools
 class Analyze(object): 
 	def __init__(self,opt):
 		self.opt = opt
@@ -13,13 +15,20 @@ class Analyze(object):
 		f = open(outFile, 'w')
 		searchFile = " ".join(glob.glob(opt.search))
 		for align in searchFile.split(" "):
-			gc-stats.main(align)	
-		search = os.path + "/*/gc-stat.txt"
+			gc_stats.main(align)	
+		print "All GC stat files have been generated"
+
+		search = opt.path + "/*/gc-stat.txt"
 	
 		print >>f, "%s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s %s" %("SEQUENCE","TAXON","A_C","C_C","G_C","T_C","N_C","frag_C","A_R","C_R","G_R","T_R","c1_A_C","c1_C_C","c1_G_C","c1_T_C","c1_N_C","c1_frag_C","c1_A_R","c1_C_R","c1_G_R","c1_T_R","c2_A_C","c2_C_C","c2_G_C","c2_T_C","c2_N_C","c2_frag_C","c2_A_R","c2_C_R","c2_G_R","c2_T_R","c3_A_C","c3_C_C","c3_G_C","c3_T_C","c3_N_C","c3_frag_C","c3_A_R","c3_C_R","c3_G_R","c3_T_R")	
 		f.close()
-		concatenateFiles(outFile, search)	
-		
+		tools.concatenateFiles(outFile, search)	
+		print "Concatenated GC stats are written to %s" % (outFile)
+	def occupancyAnalysis(self):
+		opt = self.opt
+		outFile = opt.path + "/occupancy.csv"
+		tools.occupancy(opt.search, outFile)
+		print "All the occupancy stats have written on file %s" % (outFile)  
 	def treesAnalyses(self):
 		opt = self.opt
 		outFile = opt.path + "/clades.txt"
@@ -112,6 +121,26 @@ class Analyze(object):
 		err.write(stdout)
 		err.write(stderr)
 		err.close()
+	def geneTreeBranchInfo(self):
+		opt = self.opt
+		searchFiles = " ".join(glob.glob(opt.search))
+                #for tree in searchFiles.split(" "):
+                 #       tools.reroot(tree, opt.root, opt.annotation)
+		#treeName = glob.glob(opt.searchrooted)
+		#outFile = opt.path + "/branchLengthInfo.csv"
+		#tools.branchInfo(treeName, outFile)	
+		#print "The branch Length stats are written on file %s" % (outFile)
+		treeName = glob.glob(opt.search)
+		outFile = opt.path + "/branchSupportInfo.csv"
+		tools.branchSupports(treeName, outFile)
+		print "The branch Supports are written on file %s" % (outFile)
+
 	def analyze(self):
 		if self.opt.mode == 0 or self.opt.mode == 1:
 			self.treesAnalyses()
+		elif self.opt.mode == 2:
+			self.gcStatAnalysis()
+		elif self.opt.mode == 3:
+			self.occupancyAnalysis()
+		elif self.opt.mode == 4:
+			self.geneTreeBranchInfo()
