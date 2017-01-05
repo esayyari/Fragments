@@ -6,8 +6,6 @@ import os
 import re
 from optparse import OptionParser
 import find_clades 
-import reroot
-import remove_edges_from_tree
 import subprocess
 from reader import Opt
 from analyze import Analyze
@@ -49,5 +47,6 @@ if "__main__" == __name__:
 
 	opt = Opt(parser)
 	
-	analyze(opt)
+	analyzer = Analyze(opt)
+	analyzer.treesAnalyses()
 	

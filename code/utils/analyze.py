@@ -5,7 +5,7 @@ import tools
 import subprocess
 import find_clades
 class Analyze(object): 
-	def __init__(opt):
+	def __init__(self,opt):
 		self.opt = opt
 	def gcStatAnalysis(self):
 		opt = self.opt
@@ -36,7 +36,7 @@ class Analyze(object):
 
 		for tree in searchFiles.split(" "):
 			tools.reroot(tree, opt.root, opt.annotation)
-			tools.remove_edges_from_tree(tree, opt.thresh)
+			tools.remove_edges_from_tree(tree, opt.threshold)
 		
 		searchFilesthr = " ".join(glob.glob(opt.searchthr))
 		for tree in searchFilesthr.split(" "):
@@ -62,7 +62,7 @@ class Analyze(object):
 			listLine = linet.split("\t")
 			b = os.path.basename(os.path.dirname(listLine[0]))
 
-			if mode == 1:
+			if opt.mode == 1:
 				ID = os.path.basename(os.path.dirname(os.path.dirname(listLine[0])))
 				method = re.sub("^-","",re.split(ID,b)[1])
 			else:
@@ -83,7 +83,7 @@ class Analyze(object):
 			listLine = linet.split("\t")
 
 			b = os.path.basename(os.path.dirname(listLine[0]))
-			if mode == 1:
+			if opt.mode == 1:
 				ID = os.path.basename(os.path.dirname(os.path.dirname(listLine[0])))
 				method = re.sub("^-","",re.split(ID,b)[1])
 			else:
@@ -99,7 +99,7 @@ class Analyze(object):
 		currPath = os.path.dirname(os.path.abspath(__file__))
 		WS_HOME = os.environ['WS_HOME']
 		command = 'Rscript'
-		path2script = currPath  + "../R/depict_clades.R"
+		path2script = WS_HOME  + "/insects/code/R/depict_clades.R"
 		args = ["-p", WS_HOME, "-s", str(opt.mode), "-c", opt.clades, "-i", opt.path]
 		stderrFile = opt.path + "/error.log"
 		cmd = [command, path2script] + args

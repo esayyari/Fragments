@@ -3,7 +3,7 @@ import os
 from optparse import OptionParser
 class Opt(object):
 	def __init__(self, parser):
-		(path, root, clades, names, threshold, mode, style, annotation) = parseArgs(parser)
+		(path, root, clades, names, threshold, mode, style, annotation) = self.parseArgs(parser)
 		self.path = path
 		self.root = root
 		self.clades = clades
@@ -13,7 +13,7 @@ class Opt(object):
 		self.style = style
 		self.annotation = annotation
 
-		(search, searchthr, searchrooted, searchthrrooted) = searchFiles(mode, path, thresh)
+		(search, searchthr, searchrooted, searchthrrooted) = self.searchFiles(mode, self.path, threshold)
 		self.search = search
 		self.searchthr = searchthr
 		self.searchrooted = searchrooted
@@ -53,11 +53,11 @@ class Opt(object):
 		threshold = options.thresh
 
 		path = os.path.expanduser(os.path.expandvars(path))
-
+		path = os.path.abspath(path)
 		if not os.path.exists(path):
 			parser.print_help()
 			sys.exit("please check the path to the gene direcotry")
-
+	
 		root = os.path.abspath(root)
 
 		if not os.path.isfile(root):
@@ -92,7 +92,7 @@ class Opt(object):
 		annotation = options.annotation
 
 		annotation = os.path.expanduser(os.path.expandvars(annotation))
-
+		annotation = os.path.abspath(annotation)
 		if not os.path.isfile(annotation):
 			parser.print_help()
 			sys.exit("Please check the annotation file")
