@@ -113,21 +113,14 @@ def reroot(*arg):
             print "Tree %d: none of the root groups %s exist. Leaving unrooted." %(i," or ".join((" and ".join(a) for a in ROOTS)))
     print "writing results to " + resultsFile
     trees.write(path=resultsFile,schema='newick',suppress_rooting=True,suppress_leaf_node_labels=False, unquoted_underscores=True)
-def branchSupports(treeNames, outFile):
-	f = open(outFile, 'w')
-	for treeName in treeNames:
-		r = os.path.basename(treeName).split("-")
-                mode = os.path.basename(os.path.dirname(treeName))
-                DS = r[0]
-		trees = dendropy.TreeList.get_from_path(treeName,'newick',rooting="force-rooted", preserve_underscores=True)
-		for tree in trees:
-			for n in tree.postorder_node_iter():
-			        if n.is_leaf():
-					continue
-        			else:            
-        				string = DS + " " + mode + " " + n.label + "\n"
-					f.write(string)
-	f.close()
+def branchSupports(tree):
+	supp = list()
+	for n in tree.postorder_node_iter():
+		if n.is_leaf():
+			continue
+        	elif (n.label is not None):            
+			supp.append(float(n.label))
+	return supp
 
 	
 def simplifyfasta(filename):
@@ -206,10 +199,13 @@ def branchInfo(treeName, outFile):
 	        trees = dendropy.TreeList.get_from_path(gene, 'newick',rooting="force-rooted", preserve_underscores=True)
         	for i,tree in enumerate(trees):
                 	disrt = [n.distance_from_root() for n in tree.leaf_node_iter()]
-	                med = median(disrt)
+			supp = branchSupports(tree)			
+	                med = median(sorted(disrt))
         	        avg = mean(disrt)
                 	std = pstdev(disrt)
-
-	                string = DS + " " + mode + " " + str(i+1) + " " + str(med) + " " + str(avg) + " " + str(std) + "\n"
+			avgsupp = mean(supp)
+			medsupp = median(sorted(supp))
+			stdsupp = pstdev(supp)
+	                string = DS + " " + mode + " " + str(i+1) + " " + str(med) + " " + str(avg) + " " + str(std) + " " + str(medsupp) + " " + str(avgsupp) + " " + str(stdsupp) + "\n"
 			f.write(string)
         f.close()
