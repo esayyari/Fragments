@@ -257,10 +257,12 @@ metatable <- function (y,y.colors,c.counts,pages=1:3, figuresizes=c(15,13),raw.a
 		db=raw.all[raw.all$MONO=="IS_MONO",]
                 dbc=y[which(y$Classification=="Compatible (Weak Rejection)"),c(1:3)]
 		dbn=y[which(y$Classification=="Strong Rejection"),c(1:3)]
-		dbc$BOOT <- rep(-30, nrow(dbc))
-		dbn$BOOT <- rep(-100, nrow(dbn))
+		dbc$BOOT <- -0.3
+		dbn$BOOT <- -0.1
                 db2=rbind(dbn[,cols],dbc[,cols],db[,cols]);
-                db2$CLADE <- factor(db2$CLADE, levels=rev(clade.order)) 
+                #db2$CLADE <- factor(db2$CLADE, levels=rev(clade.order))
+		print("here2") 
+		print(levels(db2$CLADE))
 		nrow(db2)
 		pdf(paste(ds,"block-shades","pdf",sep="."),width=figuresizes[1],height=figuresizes[2]) 
                 p1 <- qplot(ID,CLADE,data=db2,fill=BOOT,geom="tile",xlab="",ylab="")+
