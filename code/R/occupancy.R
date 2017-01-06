@@ -4,7 +4,7 @@ require(reshape2)
 require(plyr)
 require(scales)
 
-clades<-read.csv(opt.annotation,sep='\t',header=F)
+clades<-read.csv(opt$annotation,sep='\t',header=F)
 names(clades) <- c("Names","Clade")
 dir.create('figures/')
 oc <- read.csv('occupancy.csv',header=F,sep=' ')
@@ -40,8 +40,9 @@ ocs$ID <- with(ocs, reorder(ID, Len,FUN = length))
 tc=recast(ocs[,c(1,3,4)],ID+Taxon~.); names(tc)[3]<-"occupancy"
 tc2<-tc
 
-if (! is.null(opt.modelCond)) {
-  model = opt.modelCond 
+if (! is.null(opt$modelCond)) {
+  model = opt$modelCond 
+  print(model)
   ocs2<-oc[oc$ID %in% c(model),]
   ocs2 <- dcast(ocs2,GENE_ID+Taxon~.,fun.aggregate=sum,value.var="Len")
   names(ocs2) <- c("GENE_ID","Taxon", "Len")
@@ -52,7 +53,7 @@ if (! is.null(opt.modelCond)) {
   ocs2$GENE_ID <- with(ocs2, reorder(GENE_ID, Len,FUN = length))
 
   pdf('figures/occupancy_map.pdf',width=24.5,height=11.7,compress=F)
-  ggplot(ocs2, aes(GENE_ID,Taxon)) + 
+  p1 <- ggplot(ocs2, aes(GENE_ID,Taxon)) + 
     geom_tile(aes(fill = rescale),colour = "white")+
     scale_fill_gradient(low = "white",high = "steelblue")+
     scale_x_discrete(expand = c(0, 0)) +
@@ -60,27 +61,32 @@ if (! is.null(opt.modelCond)) {
     theme(legend.position = "none",axis.ticks = element_blank(),
         axis.text.x = element_text(size=2,angle = 90, hjust = 0, colour = "grey50"),
         axis.text.y = element_text(size=8,angle = 0, hjust = 0, colour = "grey50"))
+  print(p1)
+  
   dev.off()
 }
 
 
 
 pdf('figures/occupancy.pdf',width=23.8, height=11.4,compress=F)
-qplot(data=tc,
+p1 <- qplot(data=tc,
       x=reorder(Taxon,occupancy/maxG,FUN=median),y=occupancy/maxG,geom=c("line"),
       group=ID,color=ID)+theme_bw()+theme(legend.position = "bottom",axis.ticks = element_blank(),
       axis.text.x = element_text(size=16,angle = 90, hjust = 0, colour = "grey50"),
       legend.text=element_text(size=16),axis.text.y=element_text(size=16),text = element_text(size=16))+
   scale_y_continuous(labels = percent)+
   ylab('Occupancy')+xlab('Taxon')+scale_color_brewer(name="",palette = "Paired")
+print(p1)
 dev.off()
 
 pdf('figures/occupancy_clades.pdf',width=23.8, height=11.4,compress=F)
-qplot(data=tc_clades4,reorder(Clade,clade_occupancy),clade_occupancy,
+p1 <- qplot(data=tc_clades4,reorder(Clade,clade_occupancy),clade_occupancy,
       geom="line",color=ID,group=ID)+theme_bw()+theme(legend.position = "bottom",
       axis.text.x = element_text(angle = 90, hjust = 1, vjust=0.5, colour = "grey50"))+
   xlab('Clades')+ylab('Percent')+scale_y_continuous(labels = scales::percent)+
   scale_color_brewer(name="",palette="Paired")
+print(p1)
+
 dev.off()
 
 

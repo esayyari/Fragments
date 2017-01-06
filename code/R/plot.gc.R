@@ -2,7 +2,6 @@ require(ggplot2)
 require(reshape2)
 require(reshape)
 require(plyr)
-
 f = read.csv("gc-stat.csv",sep=" ")
 fall=f[,c(1,2,3,10,11,12,13)]
 fall$GC<-fall[,5]+fall[,6]
@@ -23,7 +22,7 @@ tc=dcast(data=fcg[,c(2,4,5)],formula=SEQUENCE+variable~.,fun.aggregate=mean)
 names(tc)<-c("SEQUENCE","variable","value")
 
 pdf("figures/pTpP_GC_point.pdf",width=24,height=8)
-qplot(reorder(SEQUENCE,value),value,data=tc,geom="point", color=variable,group=variable,xlab="")+
+p <- qplot(reorder(SEQUENCE,value),value,data=tc,geom="point", color=variable,group=variable,xlab="")+
   theme(axis.text.x = element_text(angle = 90))
+print(p)
 dev.off()
-

@@ -33,6 +33,8 @@ class Analyze(object):
                 cmd = [command, path2script] + args
                 print "printing outputs and errors on " + stderrFile
                 print cmd
+		fi = open(stderrFile,'w')
+                fi.close()
                 proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 stdout, stderr = proc.communicate()
         #       x = subprocess.check_output(cmd, universal_newlines=True, stderr=subprocess.STDOUT)
@@ -57,6 +59,9 @@ class Analyze(object):
                 cmd = [command, path2script] + args
                 print "printing outputs and errors on " + stderrFile
                 print cmd
+		fi = open(stderrFile,'w')
+		fi.close()
+	
                 proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 stdout, stderr = proc.communicate()
         #       x = subprocess.check_output(cmd, universal_newlines=True, stderr=subprocess.STDOUT)
@@ -150,6 +155,8 @@ class Analyze(object):
 		cmd = [command, path2script] + args
 		print "printing outputs and errors on " + stderrFile
 		print cmd
+		fi = open(stderrFile,'w')
+                fi.close()
 		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		stdout, stderr = proc.communicate()
 	#	x = subprocess.check_output(cmd, universal_newlines=True, stderr=subprocess.STDOUT)
@@ -176,6 +183,8 @@ class Analyze(object):
                 cmd = [command, path2script] + args
                 print "printing outputs and errors on " + stderrFile
                 print cmd
+		fi = open(stderrFile,'w')
+                fi.close()
                 proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
                 stdout, stderr = proc.communicate()
         #       x = subprocess.check_output(cmd, universal_newlines=True, stderr=subprocess.STDOUT)
