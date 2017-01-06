@@ -113,13 +113,16 @@ def reroot(*arg):
             print "Tree %d: none of the root groups %s exist. Leaving unrooted." %(i," or ".join((" and ".join(a) for a in ROOTS)))
     print "writing results to " + resultsFile
     trees.write(path=resultsFile,schema='newick',suppress_rooting=True,suppress_leaf_node_labels=False, unquoted_underscores=True)
-def branchSupports(tree):
+def branchSupports(tree, DS, model, g ):
+	
 	supp = list()
 	for n in tree.postorder_node_iter():
 		if n.is_leaf():
 			continue
         	elif (n.label is not None):            
 			supp.append(float(n.label))
+			string = DS + " " + model + " " + n.label + "\n"
+			g.write(string)
 	return supp
 
 	
@@ -202,11 +205,12 @@ def leafToLeafDistances(tree):
 			brLen.append(weighted_patristic_distance)
 	return brLen
 
-def branchInfo(treeName, outFile):
+def branchInfo(treeName, outFile, outFile2):
         c={}
         f = open(outFile, 'w')
 
 	f.write("DS model_condition geneID medrootToLeafBrLen avgrootToLeafBrLen maxrootToLeafBrLen stdrootToLeafBrLen medtaxonToTaxonBrLen avgtaxonToTaxonBrLen maxtaxonToTaxonBrLen stdtaxonToTaxonBrLen medBrSupp avgBrSupp stdBrSupp\n")
+	g = open(outFile2, 'w')
        	for gene in treeName:
 		r = os.path.basename(gene).split("-")
 		mode = os.path.basename(os.path.dirname(gene))
@@ -215,7 +219,7 @@ def branchInfo(treeName, outFile):
         	for i,tree in enumerate(trees):
                 	disrt = [n.distance_from_root() for n in tree.leaf_node_iter()]
 			brLen = leafToLeafDistances(tree)
-			supp = branchSupports(tree)			
+			supp = branchSupports(tree, DS, mode, g)			
 	                med = median(sorted(disrt))
 			maxbrlen = max(disrt)
         	        avg = mean(disrt)
@@ -232,3 +236,4 @@ def branchInfo(treeName, outFile):
 				str(avg2) + " " + str(maxbrlen2) + " " + str(std2) + " " + str(medsupp) + " " + str(avgsupp) + " " + str(stdsupp) + "\n"
 			f.write(string)
         f.close()
+	g.close()

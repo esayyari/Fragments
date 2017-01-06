@@ -11,8 +11,10 @@ option_list = list(
    make_option(c("-i", "--inputPath"), type="character", default=NULL,
                help="The path to the stat files direcotry"),
    make_option(c("-a", "--annotation"), type="character", default=NULL,
-               help="Annotation file")
- ); 
+               help="Annotation file"),
+   make_option(c("-x", "--modelCond"), type="character", default=NULL,
+               help="Model Condition that occupancy map will be plotted.")
+   );
 opt_parser = OptionParser(option_list=option_list);
 if (is.null(opt$path)){
   print_help(opt_parser)
@@ -64,7 +66,8 @@ if (mode == 0 || mode == 1 ) {
    	  	theme(axis.text.x = element_text(angle = 45))
   }
 } else if (mode == 2) {
-
+  gcplot = paste(WS_HOME,"/insects/code/R/plot.gc.R", sep="")
+  source(gcplot)
 } else if (mode == 3) {
   occupancy = paste(WS_HOME,"/insects/code/R/occupancy.R", sep="")
   source(occupancy)

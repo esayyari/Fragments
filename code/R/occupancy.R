@@ -31,6 +31,40 @@ tc_clades4<-dcast(tc_clades3[ ,2:4],
 names(tc_clades4)[3]<-c("clade_occupancy")
 
 
+
+
+ocs <- ddply(oc, .(ID,GENE_ID), transform, rescale= scale(Len,center=F))
+ocs$Taxon <- with(ocs, reorder(Taxon, Len, FUN = function(x) {return(length(which(x>0)))}))
+ocs$ID <- with(ocs, reorder(ID, Len,FUN = length))
+
+tc=recast(ocs[,c(1,3,4)],ID+Taxon~.); names(tc)[3]<-"occupancy"
+tc2<-tc
+
+if (! is.null(opt.modelCond)) {
+  model = opt.modelCond 
+  ocs2<-oc[oc$ID %in% c(model),]
+  ocs2 <- dcast(ocs2,GENE_ID+Taxon~.,fun.aggregate=sum,value.var="Len")
+  names(ocs2) <- c("GENE_ID","Taxon", "Len")
+
+
+  ocs2 <- ddply(ocs2, .(GENE_ID), transform, rescale= scale(Len,center=F))
+  ocs2$Taxon <- with(ocs2, reorder(Taxon, Len, FUN = function(x) {return(length(which(x>0)))}))
+  ocs2$GENE_ID <- with(ocs2, reorder(GENE_ID, Len,FUN = length))
+
+  pdf('figures/occupancy_map.pdf',width=24.5,height=11.7,compress=F)
+  ggplot(ocs2, aes(GENE_ID,Taxon)) + 
+    geom_tile(aes(fill = rescale),colour = "white")+
+    scale_fill_gradient(low = "white",high = "steelblue")+
+    scale_x_discrete(expand = c(0, 0)) +
+    scale_y_discrete(expand = c(0, 0) )+
+    theme(legend.position = "none",axis.ticks = element_blank(),
+        axis.text.x = element_text(size=2,angle = 90, hjust = 0, colour = "grey50"),
+        axis.text.y = element_text(size=8,angle = 0, hjust = 0, colour = "grey50"))
+  dev.off()
+}
+
+
+
 pdf('figures/occupancy.pdf',width=23.8, height=11.4,compress=F)
 qplot(data=tc,
       x=reorder(Taxon,occupancy/maxG,FUN=median),y=occupancy/maxG,geom=c("line"),

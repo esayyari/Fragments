@@ -127,8 +127,9 @@ class Analyze(object):
                 for tree in searchFiles.split(" "):
                         tools.reroot(tree, opt.root, opt.annotation)
 		treeName = glob.glob(opt.searchrooted)
-		outFile = opt.path + "/branchStatscsv"
-		tools.branchInfo(treeName, outFile)	
+		outFile = opt.path + "/branchStats.csv"
+		outFile2 = opt.path + "/branchSupport.csv"
+		tools.branchInfo(treeName, outFile, outFile2)	
 		print "The branch Length and support values are written on file %s" % (outFile)
 
 	def analyze(self):
