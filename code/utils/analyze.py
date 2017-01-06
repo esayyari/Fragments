@@ -124,15 +124,12 @@ class Analyze(object):
 	def geneTreeBranchInfo(self):
 		opt = self.opt
 		searchFiles = " ".join(glob.glob(opt.search))
-                #for tree in searchFiles.split(" "):
-                 #       tools.reroot(tree, opt.root, opt.annotation)
+                for tree in searchFiles.split(" "):
+                        tools.reroot(tree, opt.root, opt.annotation)
 		treeName = glob.glob(opt.searchrooted)
 		outFile = opt.path + "/branchStatscsv"
 		tools.branchInfo(treeName, outFile)	
 		print "The branch Length and support values are written on file %s" % (outFile)
-		#treeName = glob.glob(opt.search)
-		#outFile = opt.path + "/branchSupportInfo.csv"
-		#tools.branchSupports(treeName, outFile)
 
 	def analyze(self):
 		if self.opt.mode == 0 or self.opt.mode == 1:
