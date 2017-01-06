@@ -64,9 +64,10 @@ if (mode == 0 || mode == 1 ) {
    	  	theme(axis.text.x = element_text(angle = 45))
   }
 } else if (mode == 2) {
-  
+
 } else if (mode == 3) {
-  
+  occupancy = paste(WS_HOME,"/insects/code/R/occupancy.R", sep="")
+  source(occupancy)
 } else if (mode == 4) {
   
 }

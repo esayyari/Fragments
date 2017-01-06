@@ -1,8 +1,7 @@
 require(ggplot2)
 require(reshape2)
-setwd(dirname(sys.frame(1)$ofile))
 
-f = read.csv("../results/alignment_info.stat",sep=" ")
+f = read.csv("gc-stat.csv",sep=" ")
 fall=f[,c(1,2,3,4,9,10,11,12)]
 fall$GC<-fall[,6]+fall[,7]
 fdall = melt(fall,id=c("DATASET","GENE","SEQUENCE","TAXON"))
