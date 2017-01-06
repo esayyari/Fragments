@@ -187,11 +187,26 @@ def pstdev(data):
     ss = _ss(data)
     pvar = ss/n # the population variance
     return pvar**0.5
+def leafToLeafDistances(tree):
+	pdm = tree.phylogenetic_distance_matrix()
+	listTaxon = { n.taxon for n in tree.leaf_node_iter() }
+	brLen = list()
+	for idx1, taxon1 in enumerate(tree.taxon_namespace):
+		if taxon1 not in listTaxon:
+			continue
+    		for taxon2 in tree.taxon_namespace:
+			if taxon2 not in listTaxon:
+				continue
+        		mrca = pdm.mrca(taxon1, taxon2)
+        		weighted_patristic_distance = pdm.patristic_distance(taxon1, taxon2)
+			brLen.append(weighted_patristic_distance)
+	return brLen
+
 def branchInfo(treeName, outFile):
         c={}
         f = open(outFile, 'w')
 
-
+	f.write("DS model_condition geneID medrootToLeafBrLen avgrootToLeafBrLen maxrootToLeafBrLen stdrootToLeafBrLen medtaxonToTaxonBrLen avgtaxonToTaxonBrLen maxtaxonToTaxonBrLen stdtaxonToTaxonBrLen medBrSupp avgBrSupp stdBrSupp\n")
        	for gene in treeName:
 		r = os.path.basename(gene).split("-")
 		mode = os.path.basename(os.path.dirname(gene))
@@ -199,13 +214,21 @@ def branchInfo(treeName, outFile):
 	        trees = dendropy.TreeList.get_from_path(gene, 'newick',rooting="force-rooted", preserve_underscores=True)
         	for i,tree in enumerate(trees):
                 	disrt = [n.distance_from_root() for n in tree.leaf_node_iter()]
+			brLen = leafToLeafDistances(tree)
 			supp = branchSupports(tree)			
 	                med = median(sorted(disrt))
+			maxbrlen = max(disrt)
         	        avg = mean(disrt)
                 	std = pstdev(disrt)
+			
+			med2 = median(sorted(brLen))
+			maxbrlen2 = max(brLen)
+			avg2 = mean(brLen)
+			std2 = pstdev(brLen)
 			avgsupp = mean(supp)
 			medsupp = median(sorted(supp))
 			stdsupp = pstdev(supp)
-	                string = DS + " " + mode + " " + str(i+1) + " " + str(med) + " " + str(avg) + " " + str(std) + " " + str(medsupp) + " " + str(avgsupp) + " " + str(stdsupp) + "\n"
+	                string = DS + " " + mode + " " + str(i+1) + " " + str(med) + " " + str(avg) + " " + str(maxbrlen) + " " + str(std) + " " + str(med2) + " " + \
+				str(avg2) + " " + str(maxbrlen2) + " " + str(std2) + " " + str(medsupp) + " " + str(avgsupp) + " " + str(stdsupp) + "\n"
 			f.write(string)
         f.close()
