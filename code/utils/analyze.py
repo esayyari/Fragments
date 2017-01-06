@@ -112,13 +112,13 @@ class Analyze(object):
 			listLine = linet.split("\t")
 			b = os.path.basename(os.path.dirname(listLine[0]))
 
-			if opt.mode == 1:
-				ID = os.path.basename(os.path.dirname(os.path.dirname(listLine[0])))
-				method = re.sub("^-","",re.split(ID,b)[1])
-			else:
-				ID = b
-				tmp = re.split("-", b)
-				method = tmp[len(tmp)-1]
+			#if opt.mode == 1:
+			#	ID = os.path.basename(os.path.dirname(os.path.dirname(listLine[0])))
+			#	method = re.sub("^-","",re.split(ID,b)[1])
+			#else:
+			ID = b
+			tmp = re.split("-", b)
+			method = tmp[len(tmp)-1]
 
 			MONO = listLine[1]
 			BOOT = listLine[2]
@@ -133,13 +133,13 @@ class Analyze(object):
 			listLine = linet.split("\t")
 
 			b = os.path.basename(os.path.dirname(listLine[0]))
-			if opt.mode == 1:
-				ID = os.path.basename(os.path.dirname(os.path.dirname(listLine[0])))
-				method = re.sub("^-","",re.split(ID,b)[1])
-			else:
-				ID = b
-				tmp = re.split("-", b)
-				method = tmp[len(tmp)-1]
+		#	if opt.mode == 1:
+		#		ID = os.path.basename(os.path.dirname(os.path.dirname(listLine[0])))
+		#		method = re.sub("^-","",re.split(ID,b)[1])
+		#	else:
+			ID = b
+			tmp = re.split("-", b)
+			method = tmp[len(tmp)-1]
 
 			MONO = listLine[1]
 			BOOT = listLine[2]

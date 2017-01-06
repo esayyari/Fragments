@@ -65,10 +65,14 @@ if (opt$mode == 0 || opt$mode == 1 ) {
     metabargraph(data$countes.melted,data$y,sizes=c(12.5,15))
     metabargraph2(data$countes.melted,data$y,sizes=c(12.5,15))
     metahistograms2(data$raw.all)
+    sizes = c(12.5,15)
+    pdf("Monophyletic_Bargraph2.pdf",width=sizes[1],height=sizes[2])
     p<-ggplot(data$countes.melted, aes(x = DS, y = value)) + 
-      p <- p+ geom_bar(stat="identity") + 
+       geom_bar(stat="identity") + 
       aes(fill = Classification)+facet_wrap(~CLADE)
     theme(axis.text.x = element_text(angle = 45))
+    print(p)
+    dev.off()
   }
 } else if (opt$mode == 2) {
   gcplot = paste(opt$WS_HOME,"/insects/code/R/plot.gc.R", sep="")
