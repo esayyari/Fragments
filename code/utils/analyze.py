@@ -24,11 +24,47 @@ class Analyze(object):
 		f.close()
 		tools.concatenateFiles(outFile, search)	
 		print "Concatenated GC stats are written to %s" % (outFile)
+		currPath = os.path.dirname(os.path.abspath(__file__))
+                WS_HOME = os.environ['WS_HOME']
+                command = 'Rscript'
+                path2script = WS_HOME  + "/insects/code/R/depict_clades.R"
+                args = ["-p", WS_HOME, "-s", str(opt.mode), "-c", opt.clades, "-i", opt.path, "-a", opt.annotation]
+                stderrFile = opt.path + "/error.log"
+                cmd = [command, path2script] + args
+                print "printing outputs and errors on " + stderrFile
+                print cmd
+                proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                stdout, stderr = proc.communicate()
+        #       x = subprocess.check_output(cmd, universal_newlines=True, stderr=subprocess.STDOUT)
+                err = open(stderrFile,'a')
+                err.write(stdout)
+                err.write(stderr)
+                err.close()
 	def occupancyAnalysis(self):
 		opt = self.opt
 		outFile = opt.path + "/occupancy.csv"
 		tools.occupancy(opt.search, outFile)
 		print "All the occupancy stats have written on file %s" % (outFile)  
+		currPath = os.path.dirname(os.path.abspath(__file__))
+                WS_HOME = os.environ['WS_HOME']
+                command = 'Rscript'
+                path2script = WS_HOME  + "/insects/code/R/depict_clades.R"
+		if (opt.modelCond is None):
+	                args = ["-p", WS_HOME, "-s", str(opt.mode), "-c", opt.clades, "-i", opt.path, "-a", opt.annotation]
+		else:
+			args = ["-p",  WS_HOME, "-s", str(opt.mode), "-c", opt.clades, "-i", opt.path, "-a", opt.annotation, "-x", opt.modelCond ]
+                stderrFile = opt.path + "/error.log"
+                cmd = [command, path2script] + args
+                print "printing outputs and errors on " + stderrFile
+                print cmd
+                proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                stdout, stderr = proc.communicate()
+        #       x = subprocess.check_output(cmd, universal_newlines=True, stderr=subprocess.STDOUT)
+                err = open(stderrFile,'a')
+                err.write(stdout)
+                err.write(stderr)
+                err.close()
+
 	def treesAnalyses(self):
 		opt = self.opt
 		outFile = opt.path + "/clades.txt"
@@ -109,7 +145,7 @@ class Analyze(object):
 		WS_HOME = os.environ['WS_HOME']
 		command = 'Rscript'
 		path2script = WS_HOME  + "/insects/code/R/depict_clades.R"
-		args = ["-p", WS_HOME, "-s", str(opt.mode), "-c", opt.clades, "-i", opt.path]
+		args = ["-p", WS_HOME, "-s", str(opt.mode), "-c", opt.clades, "-i", opt.path, "-a", opt.annotation]
 		stderrFile = opt.path + "/error.log"
 		cmd = [command, path2script] + args
 		print "printing outputs and errors on " + stderrFile
@@ -131,7 +167,22 @@ class Analyze(object):
 		outFile2 = opt.path + "/branchSupport.csv"
 		tools.branchInfo(treeName, outFile, outFile2)	
 		print "The branch Length and support values are written on file %s" % (outFile)
-
+		currPath = os.path.dirname(os.path.abspath(__file__))
+                WS_HOME = os.environ['WS_HOME']
+                command = 'Rscript'
+                path2script = WS_HOME  + "/insects/code/R/depict_clades.R"
+                args = ["-p", WS_HOME, "-s", str(opt.mode), "-c", opt.clades, "-i", opt.path, "-a", opt.annotation]
+                stderrFile = opt.path + "/error.log"
+                cmd = [command, path2script] + args
+                print "printing outputs and errors on " + stderrFile
+                print cmd
+                proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                stdout, stderr = proc.communicate()
+        #       x = subprocess.check_output(cmd, universal_newlines=True, stderr=subprocess.STDOUT)
+                err = open(stderrFile,'a')
+                err.write(stdout)
+                err.write(stderr)
+                err.close()
 	def analyze(self):
 		if self.opt.mode == 0 or self.opt.mode == 1:
 			self.treesAnalyses()

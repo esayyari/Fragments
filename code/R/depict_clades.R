@@ -16,6 +16,8 @@ option_list = list(
                help="Model Condition that occupancy map will be plotted.")
    );
 opt_parser = OptionParser(option_list=option_list);
+opt = parse_args(opt_parser)
+
 if (is.null(opt$path)){
   print_help(opt_parser)
   stop("At least one argument must be supplied WS_HOME.", call.=FALSE)
@@ -72,7 +74,8 @@ if (mode == 0 || mode == 1 ) {
   occupancy = paste(WS_HOME,"/insects/code/R/occupancy.R", sep="")
   source(occupancy)
 } else if (mode == 4) {
-  
+  branchStat = paste(WS_HOME,"/insects/code/R/branchStat.R", sep="")
+  source(branchStat)
 }
 
 

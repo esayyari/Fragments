@@ -3,7 +3,7 @@ import os
 from optparse import OptionParser
 class Opt(object):
 	def __init__(self, parser):
-		(path, root, clades, names, threshold, mode, style, annotation) = self.parseArgs(parser)
+		(path, root, clades, names, threshold, mode, style, annotation, modelCond) = self.parseArgs(parser)
 		self.path = path
 		self.root = root
 		self.clades = clades
@@ -12,7 +12,7 @@ class Opt(object):
 		self.mode = mode
 		self.style = style
 		self.annotation = annotation
-
+		self.modelCond = modelCond
 		(search, searchthr, searchrooted, searchthrrooted) = self.searchFiles(mode, self.path, threshold)
 		self.search = search
 		self.searchthr = searchthr
@@ -98,7 +98,9 @@ class Opt(object):
 			sys.exit("Please check the annotation file")
 
 		style = options.style
-		return (path, root, clades, names, threshold, mode, style, annotation)
+		modelCond = options.modelCond
+
+		return (path, root, clades, names, threshold, mode, style, annotation, modelCond)
 	def searchFiles(self, mode, path, thresh):
 		if mode == 0:
 			search = path + '/*/' + 'estimated_species_tree.tree'

@@ -44,7 +44,8 @@ if "__main__" == __name__:
 
 	parser.add_option("-t", "--threshold", dest="thresh",
 			  help="The bootstrap threshold")
-
+	parser.add_option("-x", "--modelCond", dest="modelCond", default = None,
+			  help="The model condition that the occupancy map will be plotted for")
 	opt = Opt(parser)
 	
 	analyzer = Analyze(opt)
