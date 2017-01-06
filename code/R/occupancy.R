@@ -2,25 +2,16 @@ require(ggplot2)
 require(reshape)
 require(plyr)
 
-setwd(dirname(sys.frame(1)$ofile))
-clades<-read.csv("../results/annotate.txt",sep='\t',header=T)
-oc <- read.csv('../results/occupancy.csv',header=F,sep=' ')
-oc2<-read.csv('../results/occupancy_long_branch_filtered.csv',header=F,sep=' ')
+#clades<-read.csv(opt.annotation,sep='\t',header=T)
 
-names(oc)<-c("Seq","GENE_ID","filtered_sites","filtered_taxa", "Taxon","Len")
-names(oc2)<-c("Seq","GENE_ID","filtered_sites","filtered_taxa", "Taxon","Len","sd","method")
+oc <- read.csv('occupancy.csv',header=F,sep=' ')
+
+names(oc)<-c("Seq","GENE_ID","model_condition", "Taxon","Len")
 oc$sd<-"None"
 oc$method<-"None"
-oc<-rbind(oc,oc2)
 
 oc$ID <- apply( oc[ , c(1,3,4,7,8) ] , 1 , paste0 , collapse = "-" )
 oc<-oc[,c(9,2,5,6)]
-oc<-oc[grepl("F.*10.*N",oc$ID) | grepl("F.*10-50-3-avg",oc$ID),]
-#if (length(names(oc)) == 4) {
- # oc <- dcast(oc,GENE_ID+Taxon~.,fun.aggregate=sum,value.var="Len")
-#}
-
-#names(oc) <- c("ID","Taxon", "Len")
 
 ocs <- ddply(oc, .(ID,GENE_ID), transform, rescale= scale(Len,center=F))
 ocs$Taxon <- with(ocs, reorder(Taxon, Len, FUN = function(x) {return(length(which(x>0)))}))
