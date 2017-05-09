@@ -19,7 +19,7 @@ Mecoptera	"Nannochorista philpotti+""Boreus hyemalis""+""Panorpa vulgaris""+""Bi
 Neuropterida	"Conwentzia psociformis+""Xanthostigma xanthostigma""+""Inocellia crassicornis""+""Corydalus cornutus""+""Sialis lutaria""+""Osmylus fulvicephalus""+""Euroleon nostras""+""Dichochrysa prasina"""	None		1	
 Odonata	"Calopteryx splendens+""Cordulegaster boltonii""+""Epiophlebia superstes"""	None		1	
 Orthoptera	"Gryllotalpa sp+""Ceuthophilus sp""+""Tetrix subulata""+""Stenobothrus lineatus""+""Prosarthria teretrirostris"""	None		1	
-Outgroup	All-"Speleonectes tulumensis-""DAPHNIA PULEX""-""IXODES SCAPULARIS""-""Glomeris pustulata""-""Symphylella vulgaris""-""Cypridininae sp""-""Lepeophtheirus salmonis""-""Sarsinebalia urgorii""-""Litopenaeus vannamei""-""Celuca puligator"""	None		1	
+Ingroup	All-"Speleonectes tulumensis-""DAPHNIA PULEX""-""IXODES SCAPULARIS""-""Glomeris pustulata""-""Symphylella vulgaris""-""Cypridininae sp""-""Lepeophtheirus salmonis""-""Sarsinebalia urgorii""-""Litopenaeus vannamei""-""Celuca puligator"""	None		1	
 Phasmida/phasmatodea	"Timema cristinae+""Aretaon asperrimus""+""Peruphasma schultei"""	None		1	
 Plecoptera	"Perla marginata+""Leuctra sp""+""Cosmioperla kuna"""	None		1	
 Protura	"Acerentomon sp"""	None		0	
@@ -30,19 +30,19 @@ Thysanoptera	"Gynaikothrips ficorum+""Frankliniella cephalica""+""Thrips palmi""
 Thysanura/zygentoma	"Tricholepidion gertschi+""Atelura formicaria""+""Thermobia domestica"""	None		1	
 Trichoptera	"Hydroptilidae sp+""Rhyacophila fasciata""+""Platycentropus radiatus""+""Cheumatopsyche sp""+""Philopotamus ludificatus"""	None		1	
 Zoraptera	"Zorotypus caudelli"""	None		0	
-Mecoptera/Siphonaptera	Siphonaptera+Mecoptera	None	Siphonaptera+Mecoptera	0	
-Diptera/Mecoptera/Siphonaptera	Mecoptera/Siphonaptera+Diptera	None	Mecoptera/Siphonaptera+Diptera	0	
-Trichoptera/Lepidoptera	Lepidoptera+Trichoptera	None	Lepidoptera+Trichoptera	0	
-Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera	Trichoptera/Lepidoptera+Diptera/Mecoptera/Siphonaptera	None	Trichoptera/Lepidoptera+Diptera/Mecoptera/Siphonaptera	0	
-Strepsiptera/Neuropterida/Coleoptera	Coleoptera+Strepsiptera+Neuropterida	None	Coleoptera+Strepsiptera+Neuropterida	0	
-Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera	Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera+Strepsiptera/Neuropterida/Coleoptera	None	Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera+Strepsiptera/Neuropterida/Coleoptera	0	
-Hymenoptera/Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera	Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera+Hymenoptera	None	Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera+Hymenoptera	0	
-Hemiptera/Thysanoptera	Thysanoptera+Hemiptera	None	Thysanoptera+Hemiptera	0	
-Hemiptera/Thysanoptera/Psocodea/Hymenoptera/Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera	Hymenoptera/Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera+Hemiptera/Thysanoptera+Psocodea	None	Hymenoptera/Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera+Hemiptera/Thysanoptera+Psocodea	0	
-Grylloblattodea/Mantophasmatodea	Mantophasmatodea+Grylloblattodea	None	Mantophasmatodea+Grylloblattodea	0	
-Grylloblattodea/Mantophasmatodea/Phasmida/phasmatodea/Embiidina	Embiidina+Phasmida/phasmatodea+Grylloblattodea/Mantophasmatodea	None	Embiidina+Phasmida/phasmatodea+Grylloblattodea/Mantophasmatodea	0	
-Blattodea/Orthoptera/Plecoptera/Mantodea/Zoraptera/Dermaptera/Grylloblattodea/Mantophasmatodea/Phasmida/phasmatodea/Embiidina	Grylloblattodea/Mantophasmatodea/Phasmida/phasmatodea/Embiidina+Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera	None	Grylloblattodea/Mantophasmatodea/Phasmida/phasmatodea/Embiidina+Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera	0	
-Hemiptera/Thysanoptera/Psocodea/Hymenoptera/Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera/Blattodea/Orthoptera/Plecoptera/Mantodea/Zoraptera/Dermaptera/Grylloblattodea/Mantophasmatodea/Phasmida/phasmatodea/Embiidina	Blattodea/Orthoptera/Plecoptera/Mantodea/Zoraptera/Dermaptera/Grylloblattodea/Mantophasmatodea/Phasmida/phasmatodea/Embiidina+Hemiptera/Thysanoptera/Psocodea/Hymenoptera/Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera	None	Blattodea/Orthoptera/Plecoptera/Mantodea/Zoraptera/Dermaptera/Grylloblattodea/Mantophasmatodea/Phasmida/phasmatodea/Embiidina+Hemiptera/Thysanoptera/Psocodea/Hymenoptera/Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera	0	
-Ephemeroptera/Odonata/Hemiptera/Thysanoptera/Psocodea/Hymenoptera/Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera/Blattodea/Orthoptera/Plecoptera/Mantodea/Zoraptera/Dermaptera/Grylloblattodea/Mantophasmatodea/Phasmida/phasmatodea/Embiidina	Hemiptera/Thysanoptera/Psocodea/Hymenoptera/Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera/Blattodea/Orthoptera/Plecoptera/Mantodea/Zoraptera/Dermaptera/Grylloblattodea/Mantophasmatodea/Phasmida/phasmatodea/Embiidina+Ephemeroptera+Odonata	None	Hemiptera/Thysanoptera/Psocodea/Hymenoptera/Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera/Blattodea/Orthoptera/Plecoptera/Mantodea/Zoraptera/Dermaptera/Grylloblattodea/Mantophasmatodea/Phasmida/phasmatodea/Embiidina+Ephemeroptera+Odonata	0	
-Thysanura/zygentoma/Ephemeroptera/Odonata/Hemiptera/Thysanoptera/Psocodea/Hymenoptera/Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera/Blattodea/Orthoptera/Plecoptera/Mantodea/Zoraptera/Dermaptera/Grylloblattodea/Mantophasmatodea/Phasmida/phasmatodea/Embiidina	Ephemeroptera/Odonata/Hemiptera/Thysanoptera/Psocodea/Hymenoptera/Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera/Blattodea/Orthoptera/Plecoptera/Mantodea/Zoraptera/Dermaptera/Grylloblattodea/Mantophasmatodea/Phasmida/phasmatodea/Embiidina+Thysanura/zygentoma	None	Ephemeroptera/Odonata/Hemiptera/Thysanoptera/Psocodea/Hymenoptera/Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera/Blattodea/Orthoptera/Plecoptera/Mantodea/Zoraptera/Dermaptera/Grylloblattodea/Mantophasmatodea/Phasmida/phasmatodea/Embiidina+Thysanura/zygentoma	0	
-Archaeognatha/microcoryphia/Thysanura/zygentoma/Ephemeroptera/Odonata/Hemiptera/Thysanoptera/Psocodea/Hymenoptera/Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera/Blattodea/Orthoptera/Plecoptera/Mantodea/Zoraptera/Dermaptera/Grylloblattodea/Mantophasmatodea/Phasmida/phasmatodea/Embiidina	Thysanura/zygentoma/Ephemeroptera/Odonata/Hemiptera/Thysanoptera/Psocodea/Hymenoptera/Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera/Blattodea/Orthoptera/Plecoptera/Mantodea/Zoraptera/Dermaptera/Grylloblattodea/Mantophasmatodea/Phasmida/phasmatodea/Embiidina+Archaeognatha/microcoryphia	None	Thysanura/zygentoma/Ephemeroptera/Odonata/Hemiptera/Thysanoptera/Psocodea/Hymenoptera/Strepsiptera/Neuropterida/Coleoptera/Diptera/Mecoptera/Siphonaptera/Trichoptera/Lepidoptera/Blattodea/Orthoptera/Plecoptera/Mantodea/Zoraptera/Dermaptera/Grylloblattodea/Mantophasmatodea/Phasmida/phasmatodea/Embiidina+Archaeognatha/microcoryphia	0	
+A	Siphonaptera+Mecoptera	None	Siphonaptera+Mecoptera	1	
+B	A+Diptera	None	A+Diptera	1	
+C	Lepidoptera+Trichoptera	None	Lepidoptera+Trichoptera	1	
+B/C	C+B	None	C+B	1	
+D	Coleoptera+Strepsiptera+Neuropterida	None	Coleoptera+Strepsiptera+Neuropterida	1	
+D/B/C	B/C+D	None	B/C+D	1	
+E	D/B/C+Hymenoptera	None	D/B/C+Hymenoptera	1	
+F	Thysanoptera+Hemiptera	None	Thysanoptera+Hemiptera	1	
+G	E+F+Psocodea	None	E+F+Psocodea	1	
+H	Mantophasmatodea+Grylloblattodea	None	Mantophasmatodea+Grylloblattodea	1	
+I	Embiidina+Phasmida/phasmatodea+H	None	Embiidina+Phasmida/phasmatodea+H	1	
+J	I+Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera	None	I+Blattodea+Orthoptera+Plecoptera+Mantodea+Zoraptera+Dermaptera	1	
+K	J+G	None	J+G	1	
+L	K+Ephemeroptera+Odonata	None	K+Ephemeroptera+Odonata	1	
+M	L+Thysanura/zygentoma	None	L+Thysanura/zygentoma	1	
+N	M+Archaeognatha/microcoryphia	None	M+Archaeognatha/microcoryphia	1	
