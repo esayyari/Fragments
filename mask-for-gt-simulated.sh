@@ -15,9 +15,6 @@ out=$diroutput/$DT-$algfn-mask${percent}sites.mask${taxapercent}taxa.fasta
 
 test $# == 6 || { echo  USAGE: outpath geneID seqtype alignname site_percent taxa_percent exit 1;  }
 tmp=`mktemp`
-if [ ! -s $f.fasta ]; then
-	$WS_HOME/bootstrap/convert_to_fasta.sh $f.phylip > $f.fasta
-fi
 while read x; do
 	y=$(echo $x | grep ">")
 	if [ "$DT" == "FNA" ]; then

@@ -1,13 +1,17 @@
 #!/bin/bash
 
-set -x
+#set -x
 
 module load python
 
 DIR=$WS_HOME/insects/
 echo $DIR
-test $# == 6 || exit 1
+if [ $# -ne 6 ]; then
+ 	echo "[USAGE: ] $0 [ALIGNMENT NAME WITHOUT PHYLIP OR FASTA] [DT] [GENE IDs] [labels] [GENE DIR] [NUM CPU]"
+	exit 1
+fi
 
+echo "[USAGE: ] [ALIGNMENT NAME WITHOUT PHYLIP OR FASTA] [DT] [GENE IDs] [labels] [GENE DIR] [NUM CPU]"
 ALGNAME=$1
 DT=$2
 CPU=$6
@@ -81,9 +85,9 @@ if [ "$donebs" == "" ]; then
 	rm RAxML*best.back
 	rename "best" "best.back" *best
 	if [ $CPU -ne "1" ]; then
-		raxmlHPC-PTHREADS -T $CPU -m $model -n best -s ../$in.phylip $s -N 10 &> ../logs/best_std.errorout.$in
+		raxmlHPC-PTHREADS -T $CPU -m $model -n best -s ../$in.phylip $s -N 2 &> ../logs/best_std.errorout.$in
 	else
-		raxmlHPC -m $model -n best -s ../$in.phylip $s -N 10 &> ../logs/best_std.errorout.$in
+		raxmlHPC -m $model -n best -s ../$in.phylip $s -N 2 &> ../logs/best_std.errorout.$in
 	fi
 else
 	echo "computing bestML was done previousely"	
@@ -106,6 +110,6 @@ if [ -s "../listRemoved.txt" ]; then
 else
 	cp RAxML_bestTree.best RAxML_bestTree.best.addPoly
 fi	
-tar cvfj logs.tar.bz --remove-files RAxML_log.* RAxML_parsimonyTree.best.RUN.* RAxML_bootstrap.ml RAxML_result.best.RUN.*RAxML_bootstrap.ml*
+tar cvfj logs-bestML-raxml.tar.bz --remove-files RAxML_log.* RAxML_parsimonyTree.best.RUN.* RAxML_bootstrap.ml RAxML_result.best.RUN.*RAxML_bootstrap.ml*
 cd ..
 echo "Done">.done.$dirn

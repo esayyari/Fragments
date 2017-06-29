@@ -3,7 +3,7 @@
 set -x
 
 module load python
-
+module load dendropy
 DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
 
 test $# == 6 || exit 1

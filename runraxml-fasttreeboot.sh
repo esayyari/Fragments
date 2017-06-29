@@ -3,8 +3,8 @@
 set -x
 
 module load python
-
-DIR=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+module load dendropy
+DIR=$( cd $(dirname "$0") && pwd)
 H=$WORK/1kp/capstone/secondset
 
 test $# == 7 || exit 1
