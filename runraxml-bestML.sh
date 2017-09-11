@@ -3,6 +3,7 @@
 #set -x
 
 module load python
+module load dendropy
 
 DIR=$WS_HOME/insects/
 echo $DIR
@@ -85,7 +86,7 @@ if [ "$donebs" == "" ]; then
 	rm RAxML*best.back
 	rename "best" "best.back" *best
 	if [ $CPU -ne "1" ]; then
-		raxmlHPC-PTHREADS -T $CPU -m $model -n best -s ../$in.phylip $s -N 2 &> ../logs/best_std.errorout.$in
+		raxmlHPC-PTHREADS -T $CPU -m $model -n best -s ../$in.phylip $s -N 20 &> ../logs/best_std.errorout.$in
 	else
 		raxmlHPC -m $model -n best -s ../$in.phylip $s -N 2 &> ../logs/best_std.errorout.$in
 	fi
