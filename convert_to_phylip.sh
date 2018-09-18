@@ -3,7 +3,9 @@
 #set -x
 
 tmp=`mktemp`
-
+if [ -s "$2" ]; then
+	rm $2
+fi
 # simplifyfasta.sh
 sed -e "s/>\(.*\)/@>\1@/g" $1|tr -d "\n"|tr "@" "\n"|tail -n+2> $tmp
 

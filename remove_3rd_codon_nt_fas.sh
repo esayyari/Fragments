@@ -6,7 +6,7 @@ This script removes third codon from the DNA sequence. The input file format is 
 EOF
 }
 
-while getopts "hi:" opt; do
+while getopts "hi:o:" opt; do
         case $opt in
         h)
                 show_help
@@ -15,6 +15,9 @@ while getopts "hi:" opt; do
          i)
                 i=$OPTARG
                 ;;
+	o)
+		o=$OPTARG
+		;;
         '?')
                 printf "Unknown input option"
                 show_help
@@ -23,7 +26,9 @@ while getopts "hi:" opt; do
 done
 b=$(basename $i | sed -e 's/.fasta//')
 d=$(dirname $i)
+if [ "$o" == "" ];then
 o=$d/$b"-rm-3rdCodon.fasta"
+fi
 echo $o
 tmp=`mktemp`
 cat $i | sed -e 's/>\(.*\)/#>\1@/g' | tr -d "\n" | tr "\#" "\n" > $tmp

@@ -12,13 +12,21 @@ import copy
 import os.path
 
 hdir=os.path.dirname(os.path.realpath(__file__))
+def readRoots(rootFile):
+    f = open(rootFile,'r')
+    ROOT = list()
+    for line in f:
+        line = line.replace("\n","")
+        tmpRoot =  line.split(" ")
+        ROOT.append(tmpRoot)
+    return ROOT
 
-ROOTS = [
-        ["IXODES_SCAPULARIS"],
-        ["Symphylella_vulgaris","Glomeris_pustulata"],
-        ["Lepeophtheirus_salmonis","DAPHNIA_PULEX"],["Cypridininae_sp","Sarsinebalia_urgorii","Celuca_puligator","Litopenaeus_vannamei"]]
+#ROOTS = [
+  #      ["IXODES_SCAPULARIS"],
+ #       ["Symphylella_vulgaris","Glomeris_pustulata"],
+   #     ["Lepeophtheirus_salmonis","DAPHNIA_PULEX"],["Cypridininae_sp","Sarsinebalia_urgorii","Celuca_puligator","Litopenaeus_vannamei"]]
         #["Anopheles_gambiae","Aedes_aegypti","Phlebotomus_papatasi","Tipula_maxima","Trichocera_fuscata","Bibio_marci","Bombylius_major","Drosophila_melanogaster","Lipara_lucens","Rhagoletis_pomonella","Glossina_morsitans","Sarcophaga_crassipalpis","Triarthria_setipennis"]]
-def root (rootgroup, tree):
+def root(rootgroup, tree):
     root = None
     bigest = 0
     oldroot = tree.seed_node
@@ -48,12 +56,14 @@ def root (rootgroup, tree):
 
 if __name__ == '__main__':
 
-    if len(sys.argv) < 2: 
-        print "USAGE: treefile [output]"
+    if len(sys.argv) < 3: 
+        print "USAGE: treefile root [output] "
         sys.exit(1)
     treeName = sys.argv[1]
-    if len(sys.argv ) == 3:
-        resultsFile=sys.argv[2]
+    root_fp = sys.argv[2]
+    ROOTS = readRoots(root_fp)
+    if len(sys.argv ) == 4:
+        resultsFile=sys.argv[3]
     else:
         resultsFile="%s.%s" % (treeName, "rerooted")
     
@@ -61,10 +71,10 @@ if __name__ == '__main__':
 
     trees = dendropy.TreeList.get_from_path(treeName,'newick',rooting="force-rooted",preserve_underscores=True)
     for i,tree in enumerate(trees):
-	roots = ROOTS
+        roots = ROOTS
         while roots and root(roots[0],tree) is None:
-	    roots = roots[1:]
-        if not roots:
-            print "Tree %d: none of the root groups %s exist. Leaving unrooted." %(i," or ".join((" and ".join(a) for a in ROOTS)))
-    print "writing results to " + resultsFile        
+            roots = roots[1:]
+            if not roots:
+                print "Tree %d: none of the root groups %s exist. Leaving unrooted." %(i," or ".join((" and ".join(a) for a in ROOTS)))
+    print "writing results to " + resultsFile
     trees.write(path=resultsFile,schema='newick',suppress_rooting=True,suppress_leaf_node_labels=False)
