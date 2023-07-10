@@ -120,7 +120,7 @@ The simulated dataset is available [on Drayad](https://doi.org/doi:10.6076/D1459
 We studied an empirical transcriptomic data set of insects consisting of 1,478 protein-coding genes of 144 taxa, where
 27% of the alignment is gaps (Misof et al. 2014). We now share the biological sequences, gene trees, and species trees:
 
-* RAxML log files are available on [GitHub]([https://github.com/esayyari/Fragments/blob/master/data/Biological_InfoFiles.tar.gz)
+* RAxML log files are available on [GitHub](https://github.com/esayyari/Fragments/blob/master/data/Biological_InfoFiles.tar.gz)
 * Gene trees, species trees, and sequences are available [on Dryad](https://doi.org/doi:10.6076/D14599)
 
 ## References
