@@ -11,9 +11,10 @@ gene alignment, as often seen on real data, can result in substantial deteriorat
 tree. We then investigate a simple filtering strategy where individual fragmentary sequences are removed from individual
 genes but the rest of the gene is retained. Both in simulations and by reanalyzing a large insect phylotranscriptomic data
 set, we show the effectiveness of this simple filtering strategy.
+
 ## Experiments and Codes
 
-##### Please note that all codes are available on [this github repository](https://github.com/esayyari/Fragments/). They use python2 or bash, and dependencies are [dendropy4](https://dendropy.org/), [nwcik utility](http://cegg.unige.ch/newick_utils) and [PASTA](https://github.com/smirarab/pasta).
+##### Please note that all the code used is available on [this github repository](https://github.com/esayyari/Fragments/). The code uses python2 or bash, and dependencies are [dendropy4](https://dendropy.org/), [nwcik utility](http://cegg.unige.ch/newick_utils) and [PASTA](https://github.com/smirarab/pasta).
 
 In this section we will describe the commands we used for generating and performing the simulations as well as the biological analyses.
 
@@ -112,16 +113,15 @@ We used simulated as well as biological data to study the effects of fragmentary
 ### Simulations
 
 In simulations, we study impacts of fragmentary data and the filtering strategy on the accuracy of gene trees and eventually the accuracy of the species trees. 
-Simulated dataset is available [here](https://drive.google.com/open?id=1NuF0eG5cO3jxEHVoCgdIjiQ35qBQCuYv). The simulated dataset has 50 replicates (in 50 separate folders), with 101 species (one outgroup). For each replicate, we provide original gene sequences (all-genes.phylip), and the fragments inserted version (all-genes-fragAdded.phylip). We also provide the FastTree (using double precision), e.g. in FNA-genes.fragAdded-mask1sites.mask1taxa, and RAxML, e.g. in FNA-genes.fragAdded-mask1sites.mask1taxa-raxml, gene trees (using 50, 200, and 1000 genes) and the corresponding estimated species trees. Folders with __raxml__ at the end of their name contain RAxML gene trees. To indicate the filtering strategy we use this format: __mask[x%]sites.mask[y%]taxa__, which indicates that we removed all sites with less than _x%_ non-gap characters, and we removed all species that has less than _y%_ non-gap characters. 
+Simulated dataset is available [on Drayad](https://doi.org/doi:10.6076/D14599). The simulated dataset has 50 replicates (in 50 separate folders), with 101 species (one outgroup). For each replicate, we provide original gene sequences (all-genes.phylip), and the fragments inserted version (all-genes-fragAdded.phylip). We also provide the FastTree (using double precision), e.g. in FNA-genes.fragAdded-mask1sites.mask1taxa, and RAxML, e.g. in FNA-genes.fragAdded-mask1sites.mask1taxa-raxml, gene trees (using 50, 200, and 1000 genes) and the corresponding estimated species trees. Folders with __raxml__ at the end of their name contain RAxML gene trees. To indicate the filtering strategy we use this format: __mask[x%]sites.mask[y%]taxa__, which indicates that we removed all sites with less than _x%_ non-gap characters, and we removed all species that has less than _y%_ non-gap characters. 
 
 ### Biological
 
 We studied an empirical transcriptomic data set of insects consisting of 1,478 protein-coding genes of 144 taxa, where
 27% of the alignment is gaps (Misof et al. 2014). We now share the biological sequences, gene trees and species trees:
 
-* RAxML log files are available here [here](https://github.com/esayyari/Fragments/blob/master/data/Biological_InfoFiles.tar.gz)
-* gene trees and species trees are avaialble [here](https://drive.google.com/open?id=1QpB9FdwMAU1bkHBS7lHfAfw-P5EdL2WZ)
-* sequences are available [here](https://drive.google.com/open?id=19Z8y5FX16Oh-GYPnAvpuw7Hmv0d0DlIZ)
+* RAxML log files are available [on dryad]([https://github.com/esayyari/Fragments/blob/master/data/Biological_InfoFiles.tar.gz](https://doi.org/doi:10.6076/D14599))
+* gene trees, species trees, and sequences are avaialble [on Dryad](https://doi.org/doi:10.6076/D14599)
 
 ## References
 * A. Stamatakis: "RAxML Version 8: A tool for Phylogenetic Analysis and Post-Analysis of Large Phylogenies". In Bioinformatics, 2014
