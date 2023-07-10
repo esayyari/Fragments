@@ -2,7 +2,7 @@
 
 ## Abstract
 Species tree reconstruction from genome-wide data is increasingly being attempted, in most cases using a two-step
-approach of first estimating individual gene trees and then summarizing them to obtain a species tree. The accuracy of
+the approach of first estimating individual gene trees and then summarizing them to obtain a species tree. The accuracy of
 this approach, which promises to account for gene tree discordance, depends on the quality of the inferred gene trees. At
 the same time, phylogenomic and phylotranscriptomic analyses typically use involved bioinformatics pipelines for data
 preparation. Errors and shortcomings resulting from these preprocessing steps may impact the species tree analyses at
@@ -16,7 +16,7 @@ set, we show the effectiveness of this simple filtering strategy.
 
 ##### Please note that all the code used is available on [this github repository](https://github.com/esayyari/Fragments/). The code uses python2 or bash, and dependencies are [dendropy4](https://dendropy.org/), [nwcik utility](http://cegg.unige.ch/newick_utils) and [PASTA](https://github.com/smirarab/pasta).
 
-In this section we will describe the commands we used for generating and performing the simulations as well as the biological analyses.
+In this section, we will describe the commands we used for generating and performing the simulations as well as the biological analyses.
 
 ### Filtering alignments
 We used  __mask-for-gt.sh__ (internally uses [PASTA](https://github.com/smirarab/pasta)) to remove alignments with lots of gap characters. 
@@ -24,7 +24,7 @@ We used  __mask-for-gt.sh__ (internally uses [PASTA](https://github.com/smirarab
 ### Generate simulated dataset
 We used __draw\_parameters.py__ (please check the comments inside the code for more information) and the following files to generate the fragmentary stats for each species in each gene.
  
-* __average\_branch\_lengths.csv__: averge tip-to-root distances for biological Insects gene trees
+* __average\_branch\_lengths.csv__: average tip-to-root distances for biological Insects gene trees
 * __fragmentary\_augmented.csv__: frequency of gap characters for the biological Insects dataset
 * __simulated\_average\_branch\_lengths.csv__: averge tip-to-root distances for biological Insects gene trees per each replicate.
 
@@ -70,13 +70,13 @@ Please note that for the simulated dataset we used RAxML with 2 starting trees, 
 
 #### FastTree
 
-For nucleotide alignment we use this command:
+For nucleotide alignment, we use this command:
 
 ```
 fasttree -gtr -gamma -nt <input_phylip> > fasttree.tre.best 2> ft.log.best
 ```
 
-and for protein alignment we use the default substitution model (JTT+CAT):
+and for protein alignment, we use the default substitution model (JTT+CAT):
 
 ```
 fasttree <input_phylip> > fasttree.tre.best 2> ft.log.best
@@ -99,7 +99,7 @@ python run_seqtools.py -infile <site_filtered_sequence> -filterfragments <sequen
 ```
 
 ### Miscellaneous
-* To remove third codon postions from alignments we used __remove\_3rd\_codon\_nt\_fas.sh__.
+* To remove third codon positions from alignments we used __remove\_3rd\_codon\_nt\_fas.sh__.
 * To convert fasta file to phylip we used __convert\_to\_phylip.sh__.
 * To generate fragmentary statistics we used __generate\_fragmentary\_stat.sh__.
 * To generate GC content statistics we used __gc-stats.py__.
@@ -112,16 +112,16 @@ We used simulated as well as biological data to study the effects of fragmentary
 
 ### Simulations
 
-In simulations, we study impacts of fragmentary data and the filtering strategy on the accuracy of gene trees and eventually the accuracy of the species trees. 
-Simulated dataset is available [on Drayad](https://doi.org/doi:10.6076/D14599). The simulated dataset has 50 replicates (in 50 separate folders), with 101 species (one outgroup). For each replicate, we provide original gene sequences (all-genes.phylip), and the fragments inserted version (all-genes-fragAdded.phylip). We also provide the FastTree (using double precision), e.g. in FNA-genes.fragAdded-mask1sites.mask1taxa, and RAxML, e.g. in FNA-genes.fragAdded-mask1sites.mask1taxa-raxml, gene trees (using 50, 200, and 1000 genes) and the corresponding estimated species trees. Folders with __raxml__ at the end of their name contain RAxML gene trees. To indicate the filtering strategy we use this format: __mask[x%]sites.mask[y%]taxa__, which indicates that we removed all sites with less than _x%_ non-gap characters, and we removed all species that has less than _y%_ non-gap characters. 
+In simulations, we study the impacts of fragmentary data and the filtering strategy on the accuracy of gene trees and, eventually, species trees' accuracy. 
+The simulated dataset is available [on Drayad](https://doi.org/doi:10.6076/D14599). The simulated dataset has 50 replicates (in 50 separate folders), with 101 species (one outgroup). For each replicate, we provide original gene sequences (all-genes.phylip), and the fragments inserted version (all-genes-fragAdded.phylip). We also provide the FastTree (using double precision), e.g. in FNA-genes.fragAdded-mask1sites.mask1taxa, and RAxML, e.g. in FNA-genes.fragAdded-mask1sites.mask1taxa-raxml, gene trees (using 50, 200, and 1000 genes) and the corresponding estimated species trees. Folders with __raxml__ at the end of their name contain RAxML gene trees. To indicate the filtering strategy we use this format: __mask[x%]sites.mask[y%]taxa__, which indicates that we removed all sites with less than _x%_ non-gap characters, and we removed all species that have less than _y%_ non-gap characters. 
 
 ### Biological
 
 We studied an empirical transcriptomic data set of insects consisting of 1,478 protein-coding genes of 144 taxa, where
-27% of the alignment is gaps (Misof et al. 2014). We now share the biological sequences, gene trees and species trees:
+27% of the alignment is gaps (Misof et al. 2014). We now share the biological sequences, gene trees, and species trees:
 
-* RAxML log files are available [on dryad]([https://github.com/esayyari/Fragments/blob/master/data/Biological_InfoFiles.tar.gz](https://doi.org/doi:10.6076/D14599))
-* gene trees, species trees, and sequences are avaialble [on Dryad](https://doi.org/doi:10.6076/D14599)
+* RAxML log files are available on [GitHub]([https://github.com/esayyari/Fragments/blob/master/data/Biological_InfoFiles.tar.gz)
+* Gene trees, species trees, and sequences are available [on Dryad](https://doi.org/doi:10.6076/D14599)
 
 ## References
 * A. Stamatakis: "RAxML Version 8: A tool for Phylogenetic Analysis and Post-Analysis of Large Phylogenies". In Bioinformatics, 2014
